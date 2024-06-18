@@ -22,7 +22,7 @@ Pangenome pipeline:
 
 3. I then ran Roary again on my representative sequences.
 
-    a. Scripts and needed files for the second Roary run can be found [here]().
+    a. Scripts and needed files for the second Roary run can be found [here](https://github.com/fgonzalez3/PGCOE_BacSeq/tree/main/Fig2A/Snakemake_Workflows/Roary_Reps).
 
 4. Lastly, I created the pangenome figure in Jupyter.
 

@@ -15,3 +15,7 @@ Pangenome pipeline:
 1. All genomes collected for this analysis were complete, so the first step was to run [Prokka](https://github.com/tseemann/prokka) whose .gff files would serve as input for [Roary](https://github.com/sanger-pathogens/Roary).
    
     a. Scripts and needed files for first run of Prokka and Roary can be found [here](https://github.com/fgonzalez3/PGCOE_BacSeq/tree/main/Fig2A/Snakemake_Workflows/Prokka_Roary). 
+
+2. The next step was to run [Parnas](https://github.com/flu-crew/parnas) to select representative sequences from this initial pool that would cover >50% of the tree diversity.
+
+    a. Scripts and needed files for Parnas can be found [here](). 

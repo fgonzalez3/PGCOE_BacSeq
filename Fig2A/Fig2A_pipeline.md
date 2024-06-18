@@ -2,6 +2,7 @@
 
 Input data Needed:
 1. Serotype 3 reference sequence used to create amplicon scheme
+   
    a. [NC_017592](https://www.ncbi.nlm.nih.gov/nuccore/NC_017592.1) 
 3. S. mitis outgroup for phylogenetic tree
    a. [JYGP01](https://www.ncbi.nlm.nih.gov/nuccore/NZ_JYGP00000000.1)

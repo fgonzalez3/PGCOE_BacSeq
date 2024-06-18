@@ -18,4 +18,12 @@ Pangenome pipeline:
 
 2. The next step was to run [Parnas](https://github.com/flu-crew/parnas) to select representative sequences from this initial pool that would cover >50% of the tree diversity.
 
-    a. Scripts and needed files for Parnas can be found [here](https://github.com/fgonzalez3/PGCOE_BacSeq/tree/main/Fig2A/Snakemake_Workflows/Parnas). 
+    a. Scripts and needed files for Parnas can be found [here](https://github.com/fgonzalez3/PGCOE_BacSeq/tree/main/Fig2A/Snakemake_Workflows/Parnas).
+
+3. I then ran Roary again on my representative sequences.
+
+    a. Scripts and needed files for the second Roary run can be found [here]().
+
+4. Lastly, I created the pangenome figure in Jupyter.
+
+    a. Scripts and needed files for Jupyter plot can be found [here](). 

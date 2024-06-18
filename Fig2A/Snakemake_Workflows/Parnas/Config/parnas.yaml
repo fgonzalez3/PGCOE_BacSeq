@@ -1,0 +1,3 @@
+tree: "parnas/data/SP/roary/GPSC_pneumo_tree.newick"
+max_num: 12
+radius: [0.0005,0.0004,0.0003,0.0002,0.0001]

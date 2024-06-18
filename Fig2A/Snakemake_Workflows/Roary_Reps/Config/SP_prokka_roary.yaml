@@ -1,0 +1,35 @@
+roary_files:
+  - accessory.header.embl 
+  - accessory_binary_genes.fa 
+  - accessory_binary_genes.fa.newick 
+  - accessory_graph.dot 
+  - accessory.tab 
+  - blast_identity_frequency.Rtab 
+  - clustered_proteins 
+  - core_accessory.header.embl 
+  - core_accessory.tab 
+  - core_accessory_graph.dot 
+  - core_alignment_header.embl
+  - gene_presence_absence.Rtab 
+  - number_of_conserved_genes.Rtab 
+  - number_of_genes_in_pan_genome.Rtab 
+  - number_of_new_genes.Rtab 
+  - number_of_unique_genes.Rtab 
+  - pan_genome_reference.fa 
+  - summary_statistics.txt 
+
+samples:
+  GPSC12: GPSC_references/fasta/GPSC12_reference.fasta
+  GPSC25: GPSC_references/fasta/GPSC25_reference.fasta
+  GPSC31: GPSC_references/fasta/GPSC31_reference.fasta
+  GPSC34: GPSC_references/fasta/GPSC34_reference.fasta
+  GPSC3: GPSC_references/fasta/GPSC3_reference.fasta
+  GPSC4: GPSC_references/fasta/GPSC4_reference.fasta
+  JYGP01: GPSC_references/fasta/JYGP01.fasta
+  GPSC17: GPSC_references/fasta/GPSC17_reference.fasta
+  GPSC27: GPSC_references/fasta/GPSC27_reference.fasta
+  GPSC32: GPSC_references/fasta/GPSC32_reference.fasta
+  GPSC37: GPSC_references/fasta/GPSC37_reference.fasta
+  GPSC41: GPSC_references/fasta/GPSC41_reference.fasta
+  GPSC5: GPSC_references/fasta/GPSC5_reference.fasta
+  NC_017592: GPSC_references/fasta/NC_017592.fasta

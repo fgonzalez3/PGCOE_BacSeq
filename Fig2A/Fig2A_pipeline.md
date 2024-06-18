@@ -18,4 +18,4 @@ Pangenome pipeline:
 
 2. The next step was to run [Parnas](https://github.com/flu-crew/parnas) to select representative sequences from this initial pool that would cover >50% of the tree diversity.
 
-    a. Scripts and needed files for Parnas can be found [here](). 
+    a. Scripts and needed files for Parnas can be found [here](https://github.com/fgonzalez3/PGCOE_BacSeq/tree/main/Fig2A/Snakemake_Workflows/Parnas). 

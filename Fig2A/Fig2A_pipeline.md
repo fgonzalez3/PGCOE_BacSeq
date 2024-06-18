@@ -30,4 +30,4 @@ Pangenome pipeline:
 
 4. Lastly, I created the pangenome figure in Jupyter.
 
-    a. Scripts and needed files for Jupyter plot can be found [here](). 
+    a. Scripts and needed files for Jupyter plot can be found [here](https://github.com/fgonzalez3/PGCOE_BacSeq/tree/main/Fig2A/Jupyter). 

@@ -12,7 +12,7 @@ Input data Needed:
    a. These were pulled from [Gladestone et al. 2019](https://www.thelancet.com/article/S2352-3964(19)30259-2/fulltext#%20).
 4. Alignment statistics for our primers to the above sequences, which is needed to create the amplicon prediction plot
 
-   a. Scripts for this can be found [here](). 
+   a. Scripts for this can be found [here](https://github.com/fgonzalez3/PGCOE_BacSeq/tree/main/Fig2A/Snakemake_Workflows/Alignment_Stats). 
 
 
 Pangenome pipeline:

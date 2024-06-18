@@ -1,0 +1,15 @@
+sample_id	cons_seq
+GPSC12	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC12.gff
+GPSC17	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC17.gff
+GPSC25	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC25.gff
+GPSC27	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC27.gff
+GPSC31	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC31.gff
+GPSC32	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC32.gff
+GPSC34	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC34.gff
+GPSC37	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC37.gff
+GPSC3	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC3.gff
+GPSC41	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC41.gff
+GPSC4	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC4.gff
+GPSC5	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/GPSC5.gff
+JYGP01	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/JYGP01.gff
+NC_017592	/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/parnas/reps/SP/gffs/NC_017592.gff

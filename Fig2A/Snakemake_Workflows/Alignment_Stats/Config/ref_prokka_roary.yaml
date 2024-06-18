@@ -1,0 +1,22 @@
+roary_files:
+  - accessory.header.embl 
+  - accessory_binary_genes.fa 
+  - accessory_binary_genes.fa.newick 
+  - accessory_graph.dot 
+  - accessory.tab 
+  - blast_identity_frequency.Rtab 
+  - clustered_proteins 
+  - core_accessory.header.embl 
+  - core_accessory.tab 
+  - core_accessory_graph.dot 
+  - core_alignment_header.embl
+  - gene_presence_absence.Rtab 
+  - number_of_conserved_genes.Rtab 
+  - number_of_genes_in_pan_genome.Rtab 
+  - number_of_new_genes.Rtab 
+  - number_of_unique_genes.Rtab 
+  - pan_genome_reference.fa 
+  - summary_statistics.txt 
+
+samples:
+  NC_017592: s_pneumo_data/input/NC_017592.fasta

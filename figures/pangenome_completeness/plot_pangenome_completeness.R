@@ -1,111 +1,83 @@
-# remove any remaining environments
-rm(list = ls())
-
-library(ggplot2)
 library(ggtree)
-library(tidytree)
 library(ape)
-library(phylotools)
-library(pheatmap)
 library(RColorBrewer)
-library(cowplot)
-library(dplyr)
+library(tidyverse)
+library(ggplot2)
+#library(tidytree)
+library(phytools)
+#library(pheatmap)
+#library(cowplot)
 
-# define path to pneumo tree
-homewd= '/Users/flg9/Desktop/Developer/grubaugh_lab/snakemake_workflows/pangenomics_test/'
-setwd(paste0(homewd))
+treefile       <- "./SP_ml_phylogeny.newick"
+ampliconfile   <- "./SP_amplicon_positions.csv"
+divergencefile <- "./SP_fastani.out"
+pangenomefile  <- "./SP_gene_presence_absence_copy.csv"
+
+
+#outgroup="JYGP01"
+
+
+# tree plot ---------------------------------------------------------------
 
 # load in tree
-sp_tree <-  read.tree(file = paste0(homewd, "GPSC_pneumo_tree.newick"))
+tree <-  read.tree(treefile)
+tree$tip.label <- gsub("_reference", "", tree$tip.label)
 
-# root with outgroup
-rooted_sp_tree <- midpoint(sp_tree)
+# root with midpoint
+#tree <- ladderize(root(tree,outgroup))
+tree <- midpoint_root(tree)
 
-# rename tree tips 
-rooted_sp_tree$tip.label
-rooted_sp_tree$tip.label <- gsub("_reference", "", rooted_sp_tree$tip.label)
-rooted_sp_tree$tip.label
+treeplot <- ggtree(tree,ladderize=F) +
+  #geom_nodelab(aes(label=""), size=1, nudge_x=-0.01, nudge_y=0.25) +
+  geom_tiplab(align=T, linetype="dotted", linesize = 0.1, size = 2.5)
+treeplot
 
-# Now, rooted_sp_tree$tip.label will have "_reference" removed from the names
-print(rooted_sp_tree$tip.label)
+#get tree order 
+istip <- tree$edge[,2]<=length(tree$tip.label)
+treeorder <- tree$tip.label[tree$edge[istip,2]]
 
-# take a quick look at the tree
-rooted_sp_ggtree <- ggtree(rooted_sp_tree) +
-  geom_nodelab(aes(label=""), size=1, nudge_x=-0.01, nudge_y=0.25) +
-  geom_tiplab(align= FALSE, linetype="dotted", linesize = 0.1, size = 2.5) + geom_point(colour='black')
-
-rooted_sp_ggtree
+# pangenome representation ------------------------------------------------
 
 # load in matrix data
-roary <- read.csv("gene_presence_absence_copy.csv", header = T)
+pangenome <- read.csv(pangenomefile, header = T)
 
-# transform gene presence absence data into a matrix 
-roary[roary != ""] <- 1
-roary[is.na(roary)] <- 0
-roary <- as.data.frame(sapply(roary, as.numeric))
+pangenome <- pangenome %>% 
+  select(!c(2,3,6,7:14)) %>% 
+  rename_with(function(x) {gsub("_reference","",x)}) %>% 
+  rename_with(function(x) {gsub("\\.\\.","_",x)}) %>% 
+  rename_with(tolower,c(1:3)) %>% 
+  mutate(across(!c(1:3), function(x) {x != ""})) %>%
+  mutate(gindex = seq.int(nrow(pangenome))) %>% 
+  relocate(gindex) %>% 
+  pivot_longer(!c(1:4),names_to = "strain",values_to="present") %>% 
+  mutate(strain = factor(strain,ordered=T,levels=treeorder))
+  
 
-# sort the matrix by the sum of strains presence 
-roary_sorted <- roary[order(rowSums(roary), decreasing = TRUE), ]
+# read in divergence / fastani output
+divtable <- read.table(divergencefile, sep="\t",header = F,
+                       col.names = c("strain","ref","identity","fragments","matches")) %>% 
+                  mutate(across(c(strain,ref),function(x) {gsub(".fasta","",gsub(".*\\/","",x,perl=T))})) %>%
+                  mutate(across(c(strain,ref),function(x) {gsub("_reference","",x)}))
 
-# sort roary matrix data by phylogenetic tips 
-#tip_labels <- rooted_sp_tree$tip.label
-#roary_sorted <- roary_sorted[, tip_labels] # extracting this directly from ggtree plot is tricky, so hardcoding this
 
-# hard code order of matrix 
-order <- c("GPSC3", "GPSC37", "GPSC22", "GPSC17", "GPSC4", "GPSC32", 
-           "GPSC8", "GPSC25", "GPSC34", "GPSC26", "NC_017592", "GPSC15", "GPSC5", 
-           "JYGP01")
+# plot pangenome / divergence heatmap 
+pangenome <- merge(pangenome,divtable)
+panplot <- ggplot(subset(pangenome,present),aes(x=gindex,y=strain,fill=identity)) + 
+  geom_tile() + 
+  scale_fill_gradient(high="darkred",low="white",limits=c(80,100),name="seq identity") + 
+  scale_x_continuous(expand=c(0,0)) + 
+  theme(legend.position="bottom",
+        panel.background=element_blank(),panel.grid = element_blank(),
+        axis.title=element_blank(),axis.text.x=element_blank())
+panplot
 
-# rename colnames from roary df and sort
-colnames(roary_sorted) <- gsub("_reference", "", colnames(roary_sorted))
-roary_sorted <- roary_sorted[, order]
 
-# assign color palette
-color_palette <- colorRampPalette(c("white", "#93a3b1"))(2)  # adjust for binary data
 
-# define breaks 
-breaks <- c(-0.5, 0.5, 1.5)
+# assemble combined plots -------------------------------------------------
 
-# generate heatmap with the above breaks
-matrix_plot <- pheatmap(t(roary_sorted),
-         color = color_palette,
-         breaks = breaks,  # Use the custom breaks
-         cluster_rows = F,
-         cluster_cols = F,
-         display_numbers = F,
-         legend = F, 
-         show_rownames = F)
 
-# combine the tree and matrix to see how it looks
-combined_plot <- plot_grid(rooted_sp_ggtree, matrix_plot$gtable, ncol = 2, align = 'h')
+treeplot | panplot
 
-combined_plot
 
-# now read in the fastani output
-fastani <- read.delim('fastani.out', header = F)
-
-# change up the structure of this file 
-fastani$V1 <- sub(".*(GPSC\\d+)_reference\\.fasta", "\\1", fastani$V1)
-fastani$V1 <- sub(".*(JYGP01)\\.fasta", "\\1", fastani$V1)
-fastani$V1 <- sub(".*(NC_017592)\\.fasta", "\\1", fastani$V1)
-
-fastani$V2 <- sub(".*(NC_017592)\\.fasta", "\\1", fastani$V2)
-
-colnames(fastani) <- c("GPSC", "Reference", "ANI", "Seq_Fragments", "Ortho_Matches")
-
-# now plot ANI across gene matrix 
-head(fastani)
-
-# normalise
-fastani$Normalized_ANI <- (fastani$ANI - min(fastani$ANI)) / (max(fastani$ANI) - min(fastani$ANI))
-
-# create color pallete for ANI vals
-ani_colors <- colorRampPalette(c("blue", "red"))(100)
-
-# map normalized values to colors
-fastani$ANI_Color <- ani_colors[as.integer(fastani$Normalized_ANI * 99) + 1]
-
-# create a data frame for row annotations
-row_annotations <- data.frame(ANI_Color = fastani$ANI_Color)
-rownames(row_annotations) <- fastani$GPSC 
+ampmap <- read.table("SP_amplicon_positions.csv",sep="\t")
 

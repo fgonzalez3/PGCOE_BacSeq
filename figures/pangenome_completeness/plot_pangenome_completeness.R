@@ -5,13 +5,14 @@ library(tidyverse)
 library(ggplot2)
 #library(tidytree)
 library(phytools)
-#library(pheatmap)
-#library(cowplot)
+library(patchwork)
 
 treefile       <- "./SP_ml_phylogeny.newick"
 ampliconfile   <- "./SP_amplicon_positions.csv"
+assemblyfile   <- "./SP_assembly_lengths.txt"
 divergencefile <- "./SP_fastani.out"
 pangenomefile  <- "./SP_gene_presence_absence_copy.csv"
+outfile  <- "./SP_combined_plot.png"
 
 
 #outgroup="JYGP01"
@@ -27,9 +28,13 @@ tree$tip.label <- gsub("_reference", "", tree$tip.label)
 #tree <- ladderize(root(tree,outgroup))
 tree <- midpoint_root(tree)
 
+treesize = max(tree$edge.length)
+
 treeplot <- ggtree(tree,ladderize=F) +
   #geom_nodelab(aes(label=""), size=1, nudge_x=-0.01, nudge_y=0.25) +
-  geom_tiplab(align=T, linetype="dotted", linesize = 0.1, size = 2.5)
+  geom_tiplab(align=T, offset = treesize*0.01, linetype="dotted", 
+              linesize = 0.4,size=3) + 
+  scale_x_continuous(expand=c(0,treesize*0.35))
 treeplot
 
 #get tree order 
@@ -66,18 +71,42 @@ panplot <- ggplot(subset(pangenome,present),aes(x=gindex,y=strain,fill=identity)
   geom_tile() + 
   scale_fill_gradient(high="darkred",low="white",limits=c(80,100),name="seq identity") + 
   scale_x_continuous(expand=c(0,0)) + 
+  scale_y_discrete(expand=c(0,0)) + 
   theme(legend.position="bottom",
-        panel.background=element_blank(),panel.grid = element_blank(),
-        axis.title=element_blank(),axis.text.x=element_blank())
+        panel.background=element_blank(),
+        panel.grid = element_blank(),
+        axis.title=element_blank(),axis.text.x=element_blank(),
+        axis.ticks=element_blank(),
+        axis.text.y=element_blank(),
+        plot.title = element_text(hjust = 0.5))+
+  ggtitle("pangenome representation")
 panplot
 
+
+# read amplicon mappings --------------------------------------------------
+assembly_lengths <- read.table(assemblyfile,header=F,col.names=c("strain","start","end"),sep="\t") %>%
+  mutate(strain = factor(strain,ordered=T,levels=treeorder)) %>%
+  mutate(y = as.numeric(strain)-0.5)
+
+ampmap <- read.table(ampliconfile,col.names = c("strain","start","end","panel")) %>%
+              mutate(strain = factor(strain,ordered=T,levels=treeorder)) %>%
+              mutate(y = as.numeric(strain)-1 + (panel-1)*0.5)
+
+ampplot <- ggplot(ampmap,aes(xmin=start,xmax=end,ymin=y+0.05,ymax=y+0.45)) + geom_rect() + 
+  geom_segment(data=assembly_lengths,aes(x=start,xend=end,y=y,yend=y)) + 
+  scale_y_continuous(breaks=seq(0.5,length(treeorder),1),labels=treeorder,
+                     limits=c(0,length(treeorder)),expand=c(0,0)) + 
+  xlab("mb")+
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.title.y=element_blank(),
+        panel.background=element_blank(),panel.grid = element_blank(),
+        plot.title = element_text(hjust = 0.5))+
+  ggtitle("amplicon coverage")
 
 
 # assemble combined plots -------------------------------------------------
 
 
-treeplot | panplot
-
-
-ampmap <- read.table("SP_amplicon_positions.csv",sep="\t")
-
+treeplot + panplot + ampplot + plot_layout(widths=c(2,3,3))
+ggsave(outfile, width=350,height=150,dpi=400,units="mm")

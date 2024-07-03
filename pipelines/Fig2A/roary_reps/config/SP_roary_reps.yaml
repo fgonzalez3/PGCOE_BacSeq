@@ -1,0 +1,39 @@
+file_paths:
+- "results/SP/roary_reps/accessory.header.embl",
+- "results/SP/roary_reps/accessory_binary_genes.fa",
+- "results/SP/roary_reps/accessory_binary_genes.fa.newick",
+- "results/SP/roary_reps/accessory_graph.dot",
+- "results/SP/roary_reps/accessory.tab",
+- "results/SP/roary_reps/blast_identity_frequency.Rtab",
+- "results/SP/roary_reps/clustered_proteins",
+- "results/SP/roary_reps/core_accessory.header.embl",
+- "results/SP/roary_reps/core_accessory.tab",
+- "results/SP/roary_reps/core_accessory_graph.dot",
+- "results/SP/roary_reps/core_alignment_header.embl",
+- "results/SP/roary_reps/gene_presence_absence.Rtab",
+- "results/SP/roary_reps/number_of_conserved_genes.Rtab",
+- "results/SP/roary_reps/number_of_genes_in_pan_genome.Rtab",
+- "results/SP/roary_reps/number_of_new_genes.Rtab",
+- "results/SP/roary_reps/number_of_unique_genes.Rtab",
+- "results/SP/roary_reps/pan_genome_reference.fa",
+- "results/SP/roary_reps/summary_statistics.txt",
+- "results/SP/roary_reps/core_gene_alignment.aln",
+- "results/SP/roary_reps/gene_presence_absence.csv",
+- "results/SP/roary_reps/GPSC_pneumo_tree.newick", 
+- "results/SP/fastani/fastani.out"
+
+samples:
+  GPSC12: GPSC_references/fasta/GPSC12_reference.fasta
+  GPSC25: GPSC_references/fasta/GPSC25_reference.fasta
+  GPSC31: GPSC_references/fasta/GPSC31_reference.fasta
+  GPSC34: GPSC_references/fasta/GPSC34_reference.fasta
+  GPSC3: GPSC_references/fasta/GPSC3_reference.fasta
+  GPSC4: GPSC_references/fasta/GPSC4_reference.fasta
+  JYGP01: GPSC_references/fasta/JYGP01.fasta
+  GPSC17: GPSC_references/fasta/GPSC17_reference.fasta
+  GPSC27: GPSC_references/fasta/GPSC27_reference.fasta
+  GPSC32: GPSC_references/fasta/GPSC32_reference.fasta
+  GPSC37: GPSC_references/fasta/GPSC37_reference.fasta
+  GPSC41: GPSC_references/fasta/GPSC41_reference.fasta
+  GPSC5: GPSC_references/fasta/GPSC5_reference.fasta
+  NC_017592: GPSC_references/fasta/NC_017592.fasta

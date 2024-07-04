@@ -1,6 +1,6 @@
 import pandas as pd
 
-configfile: "config/prokka_roary.yaml"
+configfile: "config/SP_prokka_roary.yaml"
 
 samples_df = pd.read_csv("tsv/SP_seqs.tsv", sep="\t")
 SAMPLES = samples_df["sample_id"].tolist()
@@ -9,6 +9,7 @@ SEQ = {row.sample_id: {"sample_id": row.sample_id, "seq": row.seq_path} for row 
 rule all:
     input:
         expand("results/SP/prokka_roary/prokka/{sample}/{sample}.gff", sample=SAMPLES),
+        expand("results/SP/prokka_roary/prokka/{sample}/{sample}.gff", sample=config["samples"]),
         "results/SP/prokka_roary/roary/accessory.header.embl",
         "results/SP/prokka_roary/roary/accessory_binary_genes.fa",
         "results/SP/prokka_roary/roary/accessory_binary_genes.fa.newick",
@@ -40,6 +41,26 @@ rule prokka:
     output:
         "results/SP/prokka_roary/prokka/{sample}/{sample}.gff"
     conda: 
+        "envs/prokka.yaml"
+    threads: 4
+    log:
+        "results/SP/prokka_roary/logs/prokka/{sample}_prokka.log"
+    shell:
+        """
+        prokka --force --cpus {threads} --kingdom Bacteria --genus Streptococcus \
+        --outdir "results/SP/prokka_roary/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
+        --locustag {wildcards.sample} {input.prokka_input} &> {log}
+        """
+
+rule prokka_ref_outgroup:
+    """
+    Run Prokka individually on our refseq and the outgroup omitted from the above sequence list
+    """
+    input:
+        ref_outgroup = lambda wildcards: config['samples'][wildcards.sample]
+    output:
+        "results/SP/prokka_roary/prokka/{sample}/{sample}.gff"
+    conda:  
         "envs/prokka.yaml"
     threads: 4
     log:

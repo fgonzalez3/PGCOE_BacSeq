@@ -69,7 +69,7 @@ rule prokka_ref_outgroup:
         """
         prokka --force --cpus {threads} --kingdom Bacteria --genus Streptococcus \
         --outdir "results/SP/prokka_roary/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
-        --locustag {wildcards.sample} {input.prokka_input} &> {log}
+        --locustag {wildcards.sample} {input.ref_outgroup} &> {log}
         """
 
 rule roary:

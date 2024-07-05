@@ -57,7 +57,7 @@ rule fastree:
     input:
         aln = "results/TB/roary_reps/roary/core_gene_alignment.aln"
     output:
-        nwk = "results/TB/roary_reps/roary/GPSC_pneumo_tree.newick"
+        nwk = "results/TB/roary_reps/roary/tree.newick"
     conda:
         "envs/roary.yaml"
     log:
@@ -73,7 +73,7 @@ rule fastani_refseq_reps:
     """
     input:
         queryseqs = "txt/TB_parnas_reps.txt",
-        ref = "seqs/TB_reps/H37Rv.fasta"
+        ref = "seqs/TB_reps/H37Rv.fa"
     output:
         "results/TB/roary_reps/fastani/fastani.out"
     conda:

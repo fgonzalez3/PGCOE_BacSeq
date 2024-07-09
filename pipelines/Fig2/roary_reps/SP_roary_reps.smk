@@ -8,7 +8,29 @@ SEQ = {row.sample_id: {"sample_id": row.sample_id, "seq": row.seq_path} for row 
 
 rule all:
     input:
-        config["file_paths"]
+        "results/SP/roary_reps/roary/accessory.header.embl", 
+        "results/SP/roary_reps/roary/accessory_binary_genes.fa",
+        "results/SP/roary_reps/roary/accessory_binary_genes.fa.newick",
+        "results/SP/roary_reps/roary/accessory_graph.dot", 
+        "results/SP/roary_reps/roary/accessory.tab",   
+        "results/SP/roary_reps/roary/blast_identity_frequency.Rtab", 
+        "results/SP/roary_reps/roary/clustered_proteins", 
+        "results/SP/roary_reps/roary/core_accessory.header.embl",   
+        "results/SP/roary_reps/roary/core_accessory.tab", 
+        "results/SP/roary_reps/roary/core_accessory_graph.dot",     
+        "results/SP/roary_reps/roary/core_alignment_header.embl", 
+        "results/SP/roary_reps/roary/gene_presence_absence.Rtab", 
+        "results/SP/roary_reps/roary/number_of_conserved_genes.Rtab", 
+        "results/SP/roary_reps/roary/number_of_genes_in_pan_genome.Rtab", 
+        "results/SP/roary_reps/roary/number_of_new_genes.Rtab",     
+        "results/SP/roary_reps/roary/number_of_unique_genes.Rtab", 
+        "results/SP/roary_reps/roary/pan_genome_reference.fa", 
+        "results/SP/roary_reps/roary/summary_statistics.txt", 
+        "results/SP/roary_reps/roary/core_gene_alignment.aln", 
+        "results/SP/roary_reps/roary/gene_presence_absence.csv", 
+        "results/SP/roary_reps/roary/tree.newick", 
+        "results/SP/roary_reps/fastani/fastani.out", 
+        expand("results/SP/roary_reps/mash/dummy_{sample}.txt", sample=config["samples"])
 
 rule roary:
     """
@@ -83,4 +105,23 @@ rule fastani_refseq_reps:
     shell:
         """
         fastANI --ql {input.queryseqs} -r {input.ref} -o {output} >> {log} 2>&1
+        """
+
+rule mash_refseq_reps:
+    """
+    Run Mash between our Refseq and our Parnas reps
+    """
+    input:
+        queryseqs = lambda wildcards: config['samples'][wildcards.sample], 
+        refseq = "seqs/SP_reps/NC_017592.fasta"
+    output:
+        dummy="results/SP/roary_reps/mash/dummy_{sample}.txt"
+    conda:
+        "envs/mash.yaml"
+    log:
+        "results/SP/roary_reps/logs/mash/{sample}_mash.log"
+    shell:
+        """
+        mash dist {input.refseq} {input.queryseqs} >> results/SP/roary_reps/mash/mash.txt 2>> {log}
+        touch {output.dummy}
         """

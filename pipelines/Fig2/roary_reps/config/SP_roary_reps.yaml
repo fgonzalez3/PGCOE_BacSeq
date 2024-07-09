@@ -37,3 +37,4 @@ file_paths:
   - results/SP/roary_reps/roary/gene_presence_absence.csv
   - results/SP/roary_reps/roary/tree.newick
   - results/SP/roary_reps/fastani/fastani.out
+  - results/SP/roary_reps/mash/mash.txt

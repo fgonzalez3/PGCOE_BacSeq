@@ -37,3 +37,4 @@ file_paths:
   - results/TB/roary_reps/roary/gene_presence_absence.csv
   - results/TB/roary_reps/roary/tree.newick
   - results/TB/roary_reps/fastani/fastani.out
+  - expand("results/TB/roary_reps/mash/dummy_{sample}.txt", sample=config["samples"])

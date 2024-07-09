@@ -1,0 +1,14 @@
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/NC_019950.fa	0.00448671	0	835/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/SRR1175079.fa	0.000336872	0	986/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/ERR133985.fa	0.000215742	0	991/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/H37Rv.fa	0	0	1000/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/SRR1173640.fa	0.000312573	0	987/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/ERR181435.fa	0.000434439	0	982/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/SRR1180462.fa	0.000312573	0	987/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/SRR1019139.fa	0.000385581	0	984/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/SRR1163294.fa	0.000239895	0	990/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/ERR229952.fa	0.000532603	0	978/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/SRR998654.fa	0.000458924	0	981/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/SRR1173445.fa	0.000215742	0	991/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/SRR671749.fa	0.000143503	0	994/1000
+seqs/TB_reps/H37Rv.fa	seqs/TB_reps/ERR234202.fa	0.000336872	0	986/1000

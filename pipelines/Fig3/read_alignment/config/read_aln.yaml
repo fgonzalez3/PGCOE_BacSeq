@@ -6,7 +6,7 @@ scheme:
   - "input/scheme.primer.bed"
 
 coordinate_sequence:
-  - "input/coordinate.fasta"
+  - "input/NC_017592.fasta"
 
 
 #500,000 reads: 500,000 / 20,000,000 = 0.025

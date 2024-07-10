@@ -14,6 +14,8 @@ rule all:
         expand("results/TB/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.rev.2.bt2", sample=config["samples"]),
         expand("results/TB/primer_aln/bowtie_align/{sample}_primers_fwd.bam", sample=config["samples"]),
         expand("results/TB/primer_aln/bowtie_align/{sample}_primers_rev.bam", sample=config["samples"]),
+        expand("results/TB/primer_aln/samtools_depth_indiv_primers/{sample}_fwd.depth", sample=config["samples"]), 
+        expand("results/TB/primer_aln/samtools_depth_indiv_primers/{sample}_rev.depth", sample=config["samples"]), 
         expand("results/TB/primer_aln/samtools_merge/{sample}_merged.bam", sample=config["samples"]),
         expand("results/TB/primer_aln/samtools_depth/{sample}.depth", sample=config["samples"]), 
         #expand("results/TB/primer_aln/depth_vis/{sample}_depth.png", sample=config["samples"]), 
@@ -99,6 +101,24 @@ rule bowtie_align:
         """
         bowtie2 -x results/TB/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref -f {input.fwd} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.aln_fwd} 2> {log}
         bowtie2 -x results/TB/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref -f {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.aln_rev} 2> {log}
+        """
+
+rule fwd_rev_depth:
+    """
+    Calculate depth for fwd and rev primers separately
+    """
+    input:
+        fwd_primer_alns = rules.bowtie_align.output.aln_fwd,
+        rev_primer_alns = rules.bowtie_align.output.aln_rev 
+    output:
+        fwd_primer_depth = "results/TB/primer_aln/samtools_depth_indiv_primers/{sample}_fwd.depth",
+        rev_primer_depth = "results/TB/primer_aln/samtools_depth_indiv_primers/{sample}_rev.depth"
+    conda:
+        "envs/read_aln.yaml"
+    shell:
+        """
+        samtools depth -a {input.fwd_primer_alns} > {output.fwd_primer_depth}
+        samtools depth -a {input.rev_primer_alns} > {output.rev_primer_depth}
         """
 
 rule samtools_merge:

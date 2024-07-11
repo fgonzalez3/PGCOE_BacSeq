@@ -5,13 +5,8 @@ library(ape)
 library(RColorBrewer)
 library(tidyverse)
 library(ggplot2)
-#library(tidytree)
 library(phytools)
 library(patchwork)
-
-# define path to pneumo tree
-homewd= '/Users/flg9/Desktop/Developer/grubaugh_lab/snakemake_workflows/GitHub/PGCOE_Bacseq/results/SP/Fig2/'
-setwd(paste0(homewd))
 
 treefile       <- "./tree.newick"
 fwd_and_rev_amplicons   <- "./fwdandrev_amplicon_positions.csv"

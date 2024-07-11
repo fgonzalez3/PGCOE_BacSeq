@@ -1,0 +1,15 @@
+samples:
+  GPSC15: seqs/SP_reps/GPSC15_reference.fasta
+  GPSC17:  seqs/SP_reps/GPSC17_reference.fasta
+  GPSC22:  seqs/SP_reps/GPSC22_reference.fasta
+  GPSC25:  seqs/SP_reps/GPSC25_reference.fasta
+  GPSC26:  seqs/SP_reps/GPSC26_reference.fasta
+  GPSC32:  seqs/SP_reps/GPSC32_reference.fasta
+  GPSC34:  seqs/SP_reps/GPSC34_reference.fasta
+  GPSC37:  seqs/SP_reps/GPSC37_reference.fasta
+  GPSC3:  seqs/SP_reps/GPSC3_reference.fasta
+  GPSC4:  seqs/SP_reps/GPSC4_reference.fasta
+  GPSC5:  seqs/SP_reps/GPSC5_reference.fasta
+  GPSC8:  seqs/SP_reps/GPSC8_reference.fasta
+  JYGP01:  seqs/SP_reps/JYGP01.fasta
+  NC_017592: seqs/SP_reps/NC_017592.fasta

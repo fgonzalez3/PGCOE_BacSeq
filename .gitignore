@@ -1,3 +1,4 @@
 amplicon_statstab.npy
 output.txt
 *.DS_Store
+*.npy

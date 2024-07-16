@@ -1,0 +1,5 @@
+samples:
+  TB:
+    ref: seqs/TB/H37Rv.fa
+    outgroup: seqs/TB/NC_019950.fa
+    samples: [sample1, sample2... ]

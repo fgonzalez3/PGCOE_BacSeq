@@ -80,22 +80,7 @@ fastani <- read.table(fastani, sep="\t",header = F,
 
 
 # plot pangenome / divergence heatmap 
-pangenome_mash <- merge(pangenome,mash)
 pangenome_fastani <- merge(pangenome, fastani)
-panplot <- ggplot(subset(pangenome_mash,present),aes(x=gindex,y=strain,fill=mashdist)) + 
-  geom_tile() + 
-  scale_fill_gradient(high="white", low="darkred",limits=c(0.00,0.1),name="seq identity") + 
-  scale_x_continuous(expand=c(0,0)) + 
-  scale_y_discrete(expand=c(0,0)) + 
-  theme(legend.position="bottom",
-        panel.background=element_blank(),
-        panel.grid = element_blank(),
-        axis.title=element_blank(),axis.text.x=element_blank(),
-        axis.ticks=element_blank(),
-        axis.text.y=element_blank(),
-        plot.title = element_text(hjust = 0.5))+
-  ggtitle("pangenome representation")
-panplot
 
 panplot <- ggplot(subset(pangenome_mash, present), aes(x = gindex, y = strain, fill = mashdist)) + 
   geom_tile() + 

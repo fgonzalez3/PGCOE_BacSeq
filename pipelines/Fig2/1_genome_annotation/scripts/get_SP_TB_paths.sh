@@ -8,16 +8,16 @@ SP_GPSC_dir="/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alig
 output_file="SP_TB_seqs.tsv"
 
 # create header for output file
-echo -e "sample_id\tseq_path\tspecies" > $output_file
+echo -e "sample_id\tseq_path\tgenus" > $output_file
 
-# loop over files
+# loop over TB fasta files and add "Mycobacterium" as genus
 for fasta_file in $TB_GPSC_dir*.fa; do
     sample_id=$(basename $fasta_file .fa)
-    echo -e "$sample_id\t$fasta_file\tTB" >> $output_file
+    echo -e "$sample_id\t$fasta_file\tMycobacterium" >> $output_file
 done
 
-# Loop over the fasta files in SP GPSCs dir and add "SP" as species
+# Loop over SP fasta files and add "Streptococcus" as genus
 for fasta_file in $SP_GPSC_dir*.fasta; do
     sample_id=$(basename $fasta_file .fasta)
-    echo -e "$sample_id\t$fasta_file\tSP" >> $output_file
+    echo -e "$sample_id\t$fasta_file\tStreptococcus" >> $output_file
 done

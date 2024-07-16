@@ -8,32 +8,38 @@ library(ggplot2)
 library(phytools)
 library(patchwork)
 
-treefile       <- "./tree.newick"
-fwd_and_rev_amplicons   <- "./fwdandrev_amplicon_positions.csv"
-fwd_or_rev_amplicons <- "./fwdorrev_amplicon_positions.csv"
-assemblyfile   <- "SP_assembly_lengths.csv"
-mash <- "./mash.txt"
-fastani       <- "./fastani.out"
-pangenomefile  <- "./gene_presence_absence.csv"
-outfile  <- "./SP_combined_plot.png"
+SP_treefile       <- "./SP_tree.newick"
+TB_treefile       <- "./TB_tree.newick"
+SP_amps           <- "./SP_amp_positions.csv"
+TB_amps           <- "./TB_amp_positions.csv"
+SP_assemblyfile   <- "./SP_assembly_lengths.csv"
+TB_assemblyfile   <- "./TB_assembly_lengths.csv"
+SP_fastani        <- "./SP_fastani.out"
+TB_fastani        <- "./TB_fastani.out"
+SP_pangenomefile  <- "./SP_gene_presence_absence.csv"
+TB_pangenomefile  <- "./TB_gene_presence_absence.csv"
+SP_outfile  <- "./SP_combined_plot.png"
+TB_outfile  <- "./TB_combined_plot.png"
 
 
-#outgroup="JYGP01"
+#SP_outgroup="JYGP01"
+#TB_outgroup= "NC_019950"
 
 
 # tree plot ---------------------------------------------------------------
 
+############# SP##################
 # load in tree
-tree <-  read.tree(treefile)
-tree$tip.label <- gsub("_reference", "", tree$tip.label)
+SP_tree <-  read.tree(SP_treefile)
+SP_tree$tip.label <- gsub("_reference", "", SP_tree$tip.label)
 
 # root with midpoint
 #tree <- ladderize(root(tree,outgroup))
-tree <- midpoint_root(tree)
+SP_tree <- midpoint_root(SP_tree)
 
-treesize = max(tree$edge.length)
+treesize = max(SP_tree$edge.length)
 
-treeplot <- ggtree(tree,ladderize=F) +
+treeplot <- ggtree(SP_tree,ladderize=F) +
   #geom_nodelab(aes(label=""), size=1, nudge_x=-0.01, nudge_y=0.25) +
   geom_tiplab(align=T, offset = treesize*0.01, linetype="dotted", 
               linesize = 0.4,size=3) + 
@@ -41,8 +47,8 @@ treeplot <- ggtree(tree,ladderize=F) +
 treeplot
 
 #get tree order 
-istip <- tree$edge[,2]<=length(tree$tip.label)
-treeorder <- tree$tip.label[tree$edge[istip,2]]
+istip <- SP_tree$edge[,2]<=length(SP_tree$tip.label)
+treeorder <- SP_tree$tip.label[SP_tree$edge[istip,2]]
 
 # pangenome representation ------------------------------------------------
 

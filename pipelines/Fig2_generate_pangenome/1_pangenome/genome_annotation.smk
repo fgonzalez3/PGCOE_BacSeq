@@ -1,34 +1,37 @@
-import yaml
+import pandas as pd
 
-with open('config/SP_genome_annotation.yaml', 'r') as file:
-    config = yaml.safe_load(file)
+configfile: "config/SP_pangenome.yaml"
 
-full_paths = {filename: config['base_path'] + filename for filename in config['samples']}
+samples_df = pd.read_csv("tsv/SP_allseqs.tsv", sep="\t")
+SAMPLES = samples_df["sample_id"].tolist()
+SEQ = {row.sample_id: {"sample_id": row.sample_id, "seq": row.seq_path} for row in samples_df.itertuples()} 
 
 rule all:
     input:
-        expand("results/{genus}/fastani/fastani.out", genus=config["genus"])
-       
+        expand("results/{genus}/prokka/{sample}/{sample}.gff", genus=config["genus"],sample=SAMPLES),
+        expand("results/{genus}/roary/core_gene_alignment.aln", genus=config["genus"]),
+        expand("results/{genus}/roary/gene_presence_absence.csv", genus=config["genus"]),
+        expand("results/{genus}/roary/tree.newick", genus=config["genus"])
+
 rule prokka:
     """
     Obtain gff files needed for Roary
     """
     input:
-        inputseqs = lambda wildcards: full_paths[wildcards.sample]
+        inputseqs=lambda wildcards: SEQ[wildcards.sample]["seq"]
     output:
-        gff="results/{genus}/prokka/{wildcards.sample}/{wildcards.sample}.gff"
+        "results/{genus}/prokka/{sample}/{sample}.gff"
     params:
         genus=config["genus"]
-    conda:
+    conda: 
         "envs/prokka.yaml"
     threads: 4
     log:
-        log="results/{genus}/logs/prokka/{wildcards.sample}_prokka.log"
+        "results/{genus}/logs/prokka/{sample}_prokka.log"
     shell:
         """
-        echo "Processing sample {wildcards.sample} as genus {params.genus}"
         prokka --force --cpus {threads} --kingdom Bacteria --genus {params.genus} \
-        --outdir "$(dirname {output.gff})" --prefix {wildcards.sample} \
+        --outdir "results/{params.genus}/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
         --locustag {wildcards.sample} {input.inputseqs} &> {log}
         """
 
@@ -37,27 +40,27 @@ rule roary:
     Obtain core gene alignment and gene presence absence file
     """
     input:
-        expand("results/Fig2/{genus}/genome_annotation/prokka/{sample}/{sample}.gff", genus=config["genus"], sample=config["samples"])
+        gff_files=expand("results/{genus}/prokka/{sample}/{sample}.gff", sample=SAMPLES, genus=config["genus"])
     output:
-        "results/{genus}/roary/presence_absence.csv",
-        "results/{genus}/roary/core_gene_alignment.aln"
+        "results/{genus}/roary/core_gene_alignment.aln",
+        "results/{genus}/roary/gene_presence_absence.csv"
     conda:
         "envs/roary.yaml"
     params:
-        outdir="results/{genus}/roary", 
-        genus=config["genus"]
+       outdir="results/{genus}/roary", 
+       genus=config["genus"]
     threads: 4
     log:
         "results/{genus}/logs/roary/roary.log"
     shell:
         """
-        rm -rf results/{params.genus}/roary 
-        roary -e -n -v -p {threads} -f {params.outdir} {input}
+        rm -r results/{params.genus}/prokka_roary/roary
+        roary {input.gff_files} -e -n -v -p {threads} -f {params.outdir}
         """
-    
+
 rule fastree:
     """
-    Generate newick file using core gene alignment from Roary
+    Generate newick file for Parnas
     """
     input:
         aln="results/{genus}/roary/core_gene_alignment.aln"
@@ -71,14 +74,13 @@ rule fastree:
         """
         FastTree -nt -gtr {input.aln} > {output.nwk}
         """
-
 rule fastani:
     """
-    Run FastANI between refseq and queryseqs
+    Run FastANI between our RefSeq and our queryseqs 
     """
     input:
-        queryseqs = [config["base_path"] + sample for sample in config["samples"]],
-        ref = config["base_path"] + config["ref"]
+        queryseqs = "txt/SP_allseqs_paths.txt",
+        ref = "seqs/SP/NC_017592.fasta"
     output:
         "results/{genus}/fastani/fastani.out"
     conda:

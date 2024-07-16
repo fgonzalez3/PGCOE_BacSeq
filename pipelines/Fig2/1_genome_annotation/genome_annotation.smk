@@ -10,6 +10,8 @@ sample_info = {row['sample_id']: row for index, row in samples_df.iterrows()}
 
 # define out paths
 output_paths = []
+roary_output = []
+fasttree_output = []
 log_paths = []
 
 for sample in samples_df['sample_id']:

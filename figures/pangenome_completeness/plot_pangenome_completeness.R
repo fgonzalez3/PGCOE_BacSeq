@@ -1,9 +1,7 @@
-library(ggtree)
-library(ape)
-library(RColorBrewer)
 library(tidyverse)
 library(ggplot2)
-#library(tidytree)
+library(ggtree)
+library(ape)
 library(phytools)
 library(patchwork)
 
@@ -12,7 +10,7 @@ ampliconfile   <- "./SP_amplicon_positions.csv"
 assemblyfile   <- "./SP_assembly_lengths.txt"
 divergencefile <- "./SP_fastani.out"
 pangenomefile  <- "./SP_gene_presence_absence_copy.csv"
-outfile  <- "./SP_combined_plot.png"
+outfile        <- "./SP_combined_plot.png"
 
 
 #outgroup="JYGP01"
@@ -83,7 +81,7 @@ panplot <- ggplot(subset(pangenome,present),aes(x=gindex,y=strain,fill=identity)
 panplot
 
 
-# read amplicon mappings --------------------------------------------------
+# plot amplicon mappings --------------------------------------------------
 assembly_lengths <- read.table(assemblyfile,header=F,col.names=c("strain","start","end"),sep="\t") %>%
   mutate(strain = factor(strain,ordered=T,levels=treeorder)) %>%
   mutate(y = as.numeric(strain)-0.5)

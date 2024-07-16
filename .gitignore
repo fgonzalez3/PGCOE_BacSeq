@@ -11,3 +11,6 @@ get_SP_paths.sh
 get_TB_paths.sh
 SP_seqs.tsv
 TB_seqs.tsv
+
+# old R script
+amp_vs_mNGS_cov.R

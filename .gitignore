@@ -5,12 +5,12 @@ output.txt
 # old genome annotation snakemake files and associated files 
 TB_prokka_roary.smk
 SP_prokka_roary.smk
-SP_prokka_roary.yaml
-TB_prokka_roary.yaml
 get_SP_paths.sh
 get_TB_paths.sh
-SP_seqs.tsv
-TB_seqs.tsv
+tsv/*
+
+# old envs
+roary_2.yaml
 
 # old R script
 amp_vs_mNGS_cov.R

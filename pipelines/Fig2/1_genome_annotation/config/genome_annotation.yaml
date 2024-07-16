@@ -1,7 +1,0 @@
-samples:
-  SP:
-    JYGP01: seqs/refs_outgroups/JYGP01.fasta
-    NC_017592: seqs/refs_outgroups/NC_017592.fasta
-  TB:
-    H37Rv: seqs/refs_outgroups/H37Rv.fasta
-    NC_019950: seqs/refs_outgroups/NC_019950.fasta

@@ -7,7 +7,6 @@ TB_prokka_roary.smk
 SP_prokka_roary.smk
 get_SP_paths.sh
 get_TB_paths.sh
-tsv/
 scripts/
 
 # old envs

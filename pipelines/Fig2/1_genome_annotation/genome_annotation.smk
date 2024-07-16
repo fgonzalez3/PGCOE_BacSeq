@@ -4,8 +4,12 @@ configfile: "config/genome_annotation.yaml"
 
 samples_df = pd.read_csv("tsv/SP_TB_seqs.tsv", sep="\t")
 SAMPLES = samples_df["sample_id"].tolist()
-SEQ = {row.sample_id: {"sample_id": row.sample_id, "seq": row.seq_path, "bac": row.species} for row in samples_df.itertuples()}
-sample_to_genus = {sample_id: details['bac'] for sample_id, details in SEQ.items()}
+SEQ = {row.sample_id: {"sample_id": row.sample_id, "seq": row.seq_path, "genus": row.genus} for row in samples_df.itertuples()}
+sample_to_genus = {sample_id: details['genus'] for sample_id, details in SEQ.items()}
+
+# Print the SEQ dictionary
+for sample_id, details in SEQ.items():
+    print(f"{sample_id}: {details}")
 
 # Generate paths manually using a list comprehension
 genus_sample_paths = []
@@ -16,7 +20,7 @@ for sample, genus in sample_to_genus.items():
 # Function to get genus for a sample from the TSV sequences
 def get_genus_from_tsv(sample):
     if sample in SEQ:
-        return SEQ[sample]['bac']
+        return SEQ[sample]['genus']
     else:
         raise ValueError(f"Sample {sample} not found in TSV file.")
 
@@ -43,74 +47,90 @@ def get_path_from_config(sample):
 
 rule all:
     input:
-        expand("results/Fig2/{genus}/genome_annotation/prokka/{sample}/{sample}.gff", genus=["SP", "TB"], sample=list(config["samples"]["SP"].keys()) + list(config["samples"]["TB"].keys())),
+        expand("results/Fig2/{genus}/genome_annotation/prokka/{sample}/{sample}.gff", genus=["Streptococcus", "Mycobacterium"], sample=list(config["samples"]["Streptococcus"].keys()) + list(config["samples"]["Mycobacterium"].keys())),
         genus_sample_paths,
         expand("results/Fig2/{genus}/genome_annotation/prokka/{sample}/{sample}.gff", sample=SAMPLES, genus=[get_genus_from_tsv(sample) for sample in SAMPLES]),
-        expand("results/Fig2/{genus}/genome_annotation/roary/accessory.header.embl", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/accessory_binary_genes.fa", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/accessory_binary_genes.fa.newick", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/accessory_graph.dot", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/accessory.tab", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/blast_identity_frequency.Rtab", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/clustered_proteins", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/core_accessory.header.embl", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/core_accessory.tab", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/core_accessory_graph.dot", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/core_alignment_header.embl", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/gene_presence_absence.Rtab", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/number_of_conserved_genes.Rtab", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/number_of_genes_in_pan_genome.Rtab", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/number_of_new_genes.Rtab", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/number_of_unique_genes.Rtab", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/pan_genome_reference.fa", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/summary_statistics.txt", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/core_gene_alignment.aln", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/gene_presence_absence.csv", genus=["SP", "TB"], sample=SAMPLES),
-        expand("results/Fig2/{genus}/genome_annotation/roary/tree.newick", genus=["SP", "TB"], sample=SAMPLES)
+        expand("results/Fig2/{genus}/genome_annotation/roary/accessory.header.embl", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/accessory_binary_genes.fa", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/accessory_binary_genes.fa.newick", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/accessory_graph.dot", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/accessory.tab", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/blast_identity_frequency.Rtab", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/clustered_proteins", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/core_accessory.header.embl", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/core_accessory.tab", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/core_accessory_graph.dot", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/core_alignment_header.embl", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/gene_presence_absence.Rtab", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/number_of_conserved_genes.Rtab", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/number_of_genes_in_pan_genome.Rtab", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/number_of_new_genes.Rtab", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/number_of_unique_genes.Rtab", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/pan_genome_reference.fa", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/summary_statistics.txt", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/core_gene_alignment.aln", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/gene_presence_absence.csv", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES),
+        expand("results/Fig2/{genus}/genome_annotation/roary/tree.newick", genus=["Streptococcus", "Mycobacterium"], sample=SAMPLES)
 
-rule prokka:
-    """
-    Add information regarding genes, their location, and other features using Prokka for both SP and TB
-    """
+rule prokka_strep:
     input:
-        seq_path = lambda wildcards: get_path_from_tsv(wildcards.sample)
+        seq_path=lambda wildcards: get_path_from_tsv(wildcards.sample, 'Streptococcus')
     params:
-        species = lambda wildcards: SEQ[wildcards.sample]['bac']
+        genus='Streptococcus'
     output:
-        "results/Fig2/{genus}/genome_annotation/prokka/{sample}/{sample}.gff"
+        "results/Fig2/SP/genome_annotation/prokka/{wildcards.sample}/{wildcards.sample}.gff"
     conda: 
         "envs/prokka.yaml"
     threads: 4
     log:
-        "results/Fig2/{genus}/genome_annotation/logs/prokka/{sample}_prokka.log"
+        "results/Fig2/SP/genome_annotation/logs/prokka/{wildcards.sample}_prokka.log"
     shell:
         """
-        genus=$(if [ "{wildcards.genus}" = "SP" ]; then echo "Streptococcus"; else echo "Mycobacterium"; fi)
-        prokka --force --cpus {threads} --kingdom Bacteria --genus $genus \
-        --outdir "results/Fig2/{wildcards.genus}/genome_annotation/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
+        echo "Debug: Processing sample {wildcards.sample} as genus {params.genus}"
+        prokka --force --cpus {threads} --kingdom Bacteria --genus {params.genus} \
+        --outdir "results/Fig2/SP/genome_annotation/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
         --locustag {wildcards.sample} {input.seq_path} &> {log}
         """
 
+rule prokka_myco:
+    input:
+        seq_path=lambda wildcards: get_path_from_tsv(wildcards.sample, 'Mycobacterium')
+    params:
+        genus='Mycobacterium'
+    output:
+        "results/Fig2/TB/genome_annotation/prokka/{wildcards.sample}/{wildcards.sample}.gff"
+    conda: 
+        "envs/prokka.yaml"
+    threads: 4
+    log:
+        "results/Fig2/TB/genome_annotation/logs/prokka/{wildcards.sample}_prokka.log"
+    shell:
+        """
+        echo "Debug: Processing sample {wildcards.sample} as genus {params.genus}"
+        prokka --force --cpus {threads} --kingdom Bacteria --genus {params.genus} \
+        --outdir "results/Fig2/TB/genome_annotation/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
+        --locustag {wildcards.sample} {input.seq_path} &> {log}
+        """
+
+wildcard_constraints:
+    sample="|".join(config['samples']['Streptococcus'].keys() | config['samples']['Mycobacterium'].keys())
+
 rule prokka_ref_outgroup:
-    """
-    Run Prokka individually on our refseq and the outgroup omitted from the above sequence list
-    """
     input:
         ref_outgroup = "seqs/refs_outgroups/{sample}.fasta"
     output:
         gff = "results/Fig2/{genus}/genome_annotation/prokka/{sample}/{sample}.gff"
     params:
-        genus = lambda wildcards: get_genus_from_config(wildcards.sample)  
-    conda:  
+        genus = lambda wildcards: next(genus for genus, samples in config['samples'].items() if wildcards.sample in samples)
+    conda:
         "envs/prokka.yaml"
     threads: 4
     log:
         "results/Fig2/{genus}/genome_annotation/logs/{sample}_prokka.log"
     shell:
         """
-        genus=$(if [ "{params.genus}" = "SP" ]; then echo "Streptococcus"; else echo "Mycobacterium"; fi)
-        prokka --force --cpus {threads} --kingdom Bacteria --genus $genus \
-        --outdir "results/Fig2/{genus}/genome_annotation/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
+        prokka --force --cpus {threads} --kingdom Bacteria --genus {params.genus} \
+        --outdir "results/Fig2/{params.genus}/genome_annotation/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
         --locustag {wildcards.sample} {input.ref_outgroup} &> {log}
         """
 
@@ -119,7 +139,7 @@ rule roary:
     Run pangenome analysis using Roary
     """
     input:
-        gff_files=expand("results/Fig2/{genus}/genome_annotation/prokka/{sample}/{sample}.gff", genus=["SP", "TB"], sample=SAMPLES)
+        gff_files=lambda wildcards: expand("results/Fig2/{genus}/genome_annotation/prokka/{sample}/{sample}.gff", genus=wildcards.genus, sample=config['samples'][wildcards.genus].keys())
     output:
         "results/Fig2/{genus}/genome_annotation/roary/accessory.header.embl",
         "results/Fig2/{genus}/genome_annotation/roary/accessory_binary_genes.fa",

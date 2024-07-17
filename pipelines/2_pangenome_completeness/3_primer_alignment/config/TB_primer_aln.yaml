@@ -14,5 +14,5 @@ samples:
   SRR671749: seqs/TB_reps/SRR671749.fa 
   SRR998654: seqs/TB_reps/SRR998654.fa
 
-target: "Mycobacterium"
+genera: "TB"
 bed: "TB.scheme.primer.bed"

@@ -12,8 +12,8 @@ scripts/get_SP_TB_paths.sh
 pangenome_creation/
 
 # old parnas files 
-SP_parnas.smk
-TB_parnas.smk
+PGCOE_Bacseq/pipelines/2_pangenome_completeness/3_primer_alignment/SP_parnas.smk
+PGCOE_Bacseq/pipelines/2_pangenome_completeness/3_primer_alignment/TB_parnas.smk
 
 # old primer aln files 
 SP_primer_aln.smk

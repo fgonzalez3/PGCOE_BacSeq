@@ -39,8 +39,8 @@ rule bwa_build:
         "envs/read_aln.yaml"
     shell:
         """
-        mkdir -p results/{genera}/ref_index/
-        bwa-mem2 index -p results/{genera}/ref_index/indexed_ref {input.ref} > {log}
+        mkdir -p results/{params.genera}/ref_index/
+        bwa-mem2 index -p results/{params.genera}/ref_index/indexed_ref {input.ref} > {log}
         """
 
 rule bwa:
@@ -63,7 +63,7 @@ rule bwa:
         "envs/read_aln.yaml"
     shell: 
         """
-        bwa-mem2 mem -t 32 -p results/{genera}/ref_index/indexed_ref {input.fwd} {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.bam} 
+        bwa-mem2 mem -t 32 -p results/{params.genera}/ref_index/indexed_ref {input.fwd} {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.bam} 
         """
 
 rule coverage_subsets:

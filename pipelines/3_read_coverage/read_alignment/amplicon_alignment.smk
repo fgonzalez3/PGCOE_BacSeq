@@ -61,6 +61,8 @@ rule bwa:
         bam="results/{genera}/alignments/{sample}/{sample}_aligned_sorted.bam"
     conda:
         "envs/read_aln.yaml"
+    params:
+        genera=config["genera"]
     shell: 
         """
         bwa-mem2 mem -t 32 -p results/{params.genera}/ref_index/indexed_ref {input.fwd} {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.bam} 

@@ -8,10 +8,10 @@ SEQ = {row.sample_id: {"sample_id": row.sample_id, "seq": row.seq_path} for row 
 
 rule all:
     input:
-        expand("results/{genus}/prokka/{sample}/{sample}.gff", genus=config["genus"],sample=SAMPLES),
-        expand("results/{genus}/roary/core_gene_alignment.aln", genus=config["genus"]),
-        expand("results/{genus}/roary/gene_presence_absence.csv", genus=config["genus"]),
-        expand("results/{genus}/roary/tree.newick", genus=config["genus"])
+        expand("results/{target}/prokka/{sample}/{sample}.gff", target=config["target"],sample=SAMPLES),
+        expand("results/{target}/roary/core_gene_alignment.aln", target=config["target"]),
+        expand("results/{target}/roary/gene_presence_absence.csv", target=config["target"]),
+        expand("results/{target}/roary/tree.newick", target=config["target"])
 
 rule prokka:
     """
@@ -20,18 +20,18 @@ rule prokka:
     input:
         inputseqs=lambda wildcards: SEQ[wildcards.sample]["seq"]
     output:
-        "results/{genus}/prokka/{sample}/{sample}.gff"
+        "results/{target}/prokka/{sample}/{sample}.gff"
     params:
-        genus=config["genus"]
+        target=config["target"]
     conda: 
         "envs/prokka.yaml"
     threads: 4
     log:
-        "results/{genus}/logs/prokka/{sample}_prokka.log"
+        "results/{target}/logs/prokka/{sample}_prokka.log"
     shell:
         """
-        prokka --force --cpus {threads} --kingdom Bacteria --genus {params.genus} \
-        --outdir "results/{params.genus}/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
+        prokka --force --cpus {threads} --kingdom Bacteria --genus {params.target} \
+        --outdir "results/{params.target}/prokka/{wildcards.sample}" --prefix {wildcards.sample} \
         --locustag {wildcards.sample} {input.inputseqs} &> {log}
         """
 
@@ -40,21 +40,21 @@ rule roary:
     Obtain core gene alignment and gene presence absence file
     """
     input:
-        gff_files=expand("results/{genus}/prokka/{sample}/{sample}.gff", sample=SAMPLES, genus=config["genus"])
+        gff_files=expand("results/{target}/prokka/{sample}/{sample}.gff", sample=SAMPLES, target=config["target"])
     output:
-        "results/{genus}/roary/core_gene_alignment.aln",
-        "results/{genus}/roary/gene_presence_absence.csv"
+        "results/{target}/roary/core_gene_alignment.aln",
+        "results/{target}/roary/gene_presence_absence.csv"
     conda:
         "envs/roary.yaml"
     params:
-       outdir="results/{genus}/roary", 
-       genus=config["genus"]
+       outdir="results/{target}/roary", 
+       target=config["target"]
     threads: 4
     log:
-        "results/{genus}/logs/roary/roary.log"
+        "results/{target}/logs/roary/roary.log"
     shell:
         """
-        rm -r results/{params.genus}/prokka_roary/roary
+        rm -r results/{params.target}/prokka_roary/roary
         roary {input.gff_files} -e -n -v -p {threads} -f {params.outdir}
         """
 
@@ -63,17 +63,18 @@ rule fastree:
     Generate newick file for Parnas
     """
     input:
-        aln="results/{genus}/roary/core_gene_alignment.aln"
+        aln="results/{target}/roary/core_gene_alignment.aln"
     output:
-        nwk="results/{genus}/roary/tree.newick"
+        nwk="results/{target}/roary/tree.newick"
     conda:
         "envs/roary.yaml"
     log:
-        "results/{genus}/logs/FastTree/FastTree.log"
+        "results/{target}/logs/FastTree/FastTree.log"
     shell:
         """
         FastTree -nt -gtr {input.aln} > {output.nwk}
         """
+
 rule fastani:
     """
     Run FastANI between our RefSeq and our queryseqs 
@@ -82,11 +83,11 @@ rule fastani:
         queryseqs = "txt/SP_allseqs_paths.txt",
         ref = "seqs/SP/NC_017592.fasta"
     output:
-        "results/{genus}/fastani/fastani.out"
+        "results/{target}/fastani/fastani.out"
     conda:
         "envs/fastani.yaml"
     log:
-        "results/{genus}/logs/fastani/fastani.log"
+        "results/{target}/logs/fastani/fastani.log"
     shell:
         """
         fastANI --ql {input.queryseqs} -r {input.ref} -o {output} >> {log} 2>&1

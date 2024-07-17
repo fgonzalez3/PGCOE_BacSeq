@@ -1,6 +1,7 @@
 output.txt
 *.DS_Store
 *.npy
+*.Rhistory
 
 # old genome annotation snakemake files and associated files 
 TB_prokka_roary.smk

@@ -64,11 +64,13 @@ rule bowtie_build:
         "results/{genera}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.rev.2.bt2"
     conda:
         "envs/read_aln.yaml"
+    params:
+        genera=config["genera"]
     log:
         "results/{genera}/primer_aln/logs/bowtie_build/{sample}_bowtie_build.log"
     shell:
         """
-        bowtie2-build -f {input.queryseqs} results/{genera}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref > {log}
+        bowtie2-build -f {input.queryseqs} results/{params.genera}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref > {log}
         """
 
 rule bowtie_align:
@@ -91,12 +93,14 @@ rule bowtie_align:
         rev_aln = "results/{genera}/primer_aln/bowtie_align/{sample}_rev_aln.bam"
     conda:
         "envs/read_aln.yaml"
+    params:
+        genera=config["genera"]
     log:
         "results/{genera}/primer_aln/logs/bowtie_align/bowtie_{sample}.log"
     shell:
         """
-        bowtie2 -x results/{genera}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref -f {input.fwd} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.fwd_aln} 2> {log}
-        bowtie2 -x results/{genera}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref -f {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.rev_aln} 2> {log}
+        bowtie2 -x results/{params.genera}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref -f {input.fwd} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.fwd_aln} 2> {log}
+        bowtie2 -x results/{params.genera}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref -f {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.rev_aln} 2> {log}
         """
 
 rule fwd_rev_depth:

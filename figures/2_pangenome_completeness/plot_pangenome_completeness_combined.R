@@ -106,7 +106,7 @@ get_pangenome_plot <- function(pangenomefile, divergencefile, treefile) {
 get_amplicon_plot <- function(assemblyfile, ampliconfile, treefile) {
   # plot amplicon mappings --------------------------------------------------
   
-  maxlen=4.3e6
+  maxlen=4.45e6
   
   treeorder <- get_tree_order(treefile)
   

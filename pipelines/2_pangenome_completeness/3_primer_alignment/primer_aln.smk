@@ -1,0 +1,183 @@
+configfile: "config/SP_primer_aln.yaml"
+
+rule all:
+    input:
+        expand("results/{target}/primer_aln/fwd_primers.bed", target=config["target"]), 
+        expand("results/{target}/primer_aln/rev_primers.bed", target=config["target"]), 
+        expand("results/{target}/primer_aln/fwd.scheme.primer.fasta", target=config["target"]),
+        expand("results/{target}/primer_aln/rev.scheme.primer.fasta", target=config["target"]),
+        expand("results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.1.bt2", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.2.bt2", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.3.bt2", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.4.bt2", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.rev.1.bt2", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.rev.2.bt2", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/bowtie_align/{sample}_fwd_aln.bam", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/bowtie_align/{sample}_rev_aln.bam", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/samtools_depth_indiv_primers/{sample}_fwd.depth", sample=config["samples"], target=config["target"]), 
+        expand("results/{target}/primer_aln/samtools_depth_indiv_primers/{sample}_rev.depth", sample=config["samples"], target=config["target"]), 
+        expand("results/{target}/primer_aln/samtools_merge/{sample}_merged.bam", sample=config["samples"], target=config["target"]),
+        expand("results/{target}/primer_aln/samtools_depth/{sample}.depth", sample=config["samples"], target=config["target"]), 
+        #expand("results/{target}/primer_aln/depth_vis/{sample}_depth.png", sample=config["samples"], target=config["target"]), 
+        expand("results/{target}/primer_aln/coverage_pc/{sample}_coverage.csv", sample=config["samples"], target=config["target"])
+
+rule split_bed:
+    """
+    Use awk to extract fwd and rev primers 
+    """
+    input:
+        bed=config["bed"]
+    output:
+        fwd_pr="results/{target}/primer_aln/fwd_primers.bed", 
+        rev_pr="results/{target}/primer_aln/rev_primers.bed"
+    shell:
+        """
+        awk '$6 == "+" {{print}}' {input} > {output.fwd_pr} 
+        awk '$6 == "-" {{print}}' {input} > {output.rev_pr} 
+        """
+
+rule get_fasta:
+    """
+    Convert BED to FASTA for downstream alignment 
+    """
+    input:
+        fwd_bed = "results/{target}/primer_aln/fwd_primers.bed", 
+        rev_bed = "results/{target}/primer_aln/rev_primers.bed"
+    output:
+        bedfasta_fwd = "results/{target}/primer_aln/fwd.scheme.primer.fasta", 
+        bedfasta_rev = "results/{target}/primer_aln/rev.scheme.primer.fasta"
+    conda:
+        "envs/biopython.yaml"
+    shell:
+        """
+        python /vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/GitHub/pipelines/primer_alignment/scripts/get_indiv_fasta.py {input.fwd_bed} {input.rev_bed} {output.bedfasta_fwd} {output.bedfasta_rev}
+        """
+
+rule bowtie_build:
+    """
+    Create index of rep sequences
+    """
+    input:
+        queryseqs = lambda wildcards: config['samples'][wildcards.sample]
+    output:
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.1.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.2.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.3.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.4.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.rev.1.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.rev.2.bt2"
+    conda:
+        "envs/read_aln.yaml"
+    log:
+        "results/{target}/primer_aln/logs/bowtie_build/{sample}_bowtie_build.log"
+    shell:
+        """
+        bowtie2-build -f {input.queryseqs} results/{target}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref > {log}
+        """
+
+rule bowtie_align:
+    """
+    Align primers to rep sequences
+    """
+    input:
+        fwd = rules.get_fasta.output.bedfasta_fwd, 
+        rev = rules.get_fasta.output.bedfasta_rev,
+        idx = [
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.1.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.2.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.3.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.4.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.rev.1.bt2",
+        "results/{target}/primer_aln/bowtie_index/{sample}/{sample}_indexed_ref.rev.2.bt2" 
+        ]
+    output:
+        fwd_aln = "results/{target}/primer_aln/bowtie_align/{sample}_fwd_aln.bam",
+        rev_aln = "results/{target}/primer_aln/bowtie_align/{sample}_rev_aln.bam"
+    conda:
+        "envs/read_aln.yaml"
+    log:
+        "results/{target}/primer_aln/logs/bowtie_align/bowtie_{sample}.log"
+    shell:
+        """
+        bowtie2 -x results/{target}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref -f {input.fwd} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.fwd_aln} 2> {log}
+        bowtie2 -x results/{target}/primer_aln/bowtie_index/{wildcards.sample}/{wildcards.sample}_indexed_ref -f {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.rev_aln} 2> {log}
+        """
+
+rule fwd_rev_depth:
+    """
+    Calculate depth for fwd and rev primer alns separately
+    """
+    input:
+        fwd_primer_alns = rules.bowtie_align.output.fwd_aln,
+        rev_primer_alns = rules.bowtie_align.output.rev_aln 
+    output:
+        fwd_primer_depth = "results/{target}/primer_aln/samtools_depth_indiv_primers/{sample}_fwd.depth",
+        rev_primer_depth = "results/{target}/primer_aln/samtools_depth_indiv_primers/{sample}_rev.depth"
+    conda:
+        "envs/read_aln.yaml"
+    shell:
+        """
+        samtools depth -a {input.fwd_primer_alns} > {output.fwd_primer_depth}
+        samtools depth -a {input.rev_primer_alns} > {output.rev_primer_depth}
+        """
+
+rule samtools_merge:
+    """
+    Merge BAM files to visualize both fwd and rev primer alns
+    """
+    input:
+        fwd=rules.bowtie_align.output.fwd_aln, 
+        rev=rules.bowtie_align.output.rev_aln
+    output:
+        merged_bam="results/{target}/primer_aln/samtools_merge/{sample}_merged.bam"
+    conda:
+        "envs/read_aln.yaml"
+    shell:
+        """
+        samtools merge -o {output.merged_bam} {input.fwd} {input.rev}
+        """
+
+rule depth:
+    """
+    Calculate depth for fwd and rev primers in single BAM input
+    """
+    input:
+        primer_alns=rules.samtools_merge.output.merged_bam
+    output:
+        primer_depth="results/{target}/primer_aln/samtools_depth/{sample}.depth"
+    conda:
+        "envs/read_aln.yaml"
+    shell:
+        """
+        samtools depth -a {input.primer_alns} > {output.primer_depth}
+        """
+
+#rule visualize_depth:
+    #"""
+    #Visualize depth for each primer alignment
+    #"""
+    #input:
+        #py_input=rules.depth.output.primer_depth
+    #output:
+        #"results/{target}/primer_aln/depth_vis/{sample}_depth.png"
+    #conda:
+        #"envs/biopython.yaml"
+    #shell:
+        #"""
+        #python /vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/GitHub/pipelines/primer_alignment/scripts/plot_cov_primers.py {input.py_input} {output} 
+        #"""
+
+rule coverage:
+    """
+    Get percent coverage for each primer and rep pair
+    """
+    input:
+        "results/{target}/primer_aln/samtools_merge/{sample}_merged.bam"
+    output:
+        "results/{target}/primer_aln/coverage_pc/{sample}_coverage.csv"
+    conda:
+        "envs/read_aln.yaml"
+    shell:
+        """
+        samtools coverage {input} > {output}
+        """

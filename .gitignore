@@ -1,13 +1,23 @@
 output.txt
 *.DS_Store
 *.npy
+*.Rhistory
 
-# old genome annotation snakemake files and associated files 
+# old pangenome snakemake files and associated files 
 TB_prokka_roary.smk
 SP_prokka_roary.smk
-get_SP_paths.sh
-get_TB_paths.sh
-scripts/
+scripts/get_SP_paths.sh
+scripts/get_TB_paths.sh
+scripts/get_SP_TB_paths.sh
+pangenome_creation/
+
+# old parnas files 
+SP_parnas.smk
+TB_parnas.smk
+
+# old primer aln files 
+SP_primer_aln.smk
+TB_primer_aln.smk
 
 # old envs
 roary_2.yaml

@@ -1,8 +1,8 @@
 import pandas as pd
 
-configfile: "config/read_aln.yaml"
+configfile: "config/SP_read_aln.yaml"
 
-samples_df = pd.read_csv("tsv/amplicon_samples.tsv", sep="\t")
+samples_df = pd.read_csv("tsv/SP_amplicons.tsv", sep="\t")
 SAMPLES = samples_df["sample_id"].tolist()
 READS = {row.sample_id: {"r1": row.r1, "r2": row.r2} for row in samples_df.itertuples()}
 
@@ -10,58 +10,60 @@ SUBSETS = set(config['SUBSETS'])
 
 rule all:
     input:
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.0123",
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.amb",
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.ann",
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.bwt.2bit.64",
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.pac",
-        expand("results/SP/amplicon_alignment/bwa/{sample}/{sample}_aligned_sorted.bam", sample=SAMPLES),
-        expand("results/SP/amplicon_alignment/coverage_subsets/{sample}/{sample}_{subset}_aligned_sorted.bam", sample=SAMPLES, subset=SUBSETS),
-        expand("results/SP/amplicon_alignment/coverage_subsets/{sample}/{sample}_{subset}_aligned_sorted.csv", sample=SAMPLES, subset=SUBSETS)  
+        expand("results/{genera}/ref_index/indexed_ref.0123", genera=config["genera"]),
+        expand("results/{genera}/ref_index/indexed_ref.amb", genera=config["genera"]),
+        expand("results/{genera}/ref_index/indexed_ref.ann", genera=config["genera"]),
+        expand("results/{genera}/ref_index/indexed_ref.bwt.2bit.64", genera=config["genera"]),
+        expand("results/{genera}/ref_index/indexed_ref.pac", genera=config["genera"]),
+        expand("results/{genera}/alignments/{sample}/{sample}_aligned_sorted.bam", sample=SAMPLES, genera=config["genera"]),
+        expand("results/{genera}/coverage_subsets/{sample}/{sample}_{subset}_aligned_sorted.bam", sample=SAMPLES, subset=SUBSETS, genera=config["genera"]),
+        expand("results/{genera}/coverage_subsets/{sample}/{sample}_{subset}_aligned_sorted.csv", sample=SAMPLES, subset=SUBSETS, genera=config["genera"])  
 
 rule bwa_build:
     """
-    Create index of our consensus sequence that was used as PrimalScheme reference
+    Create index of our refseq
     """
     input:
         ref=config["coordinate_sequence"]
     output:
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.0123",
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.amb",
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.ann",
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.bwt.2bit.64",
-        "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.pac"
+        "results/{genera}/ref_index/indexed_ref.0123",
+        "results/{genera}/ref_index/indexed_ref.amb",
+        "results/{genera}/ref_index/indexed_ref.ann",
+        "results/{genera}/ref_index/indexed_ref.bwt.2bit.64",
+        "results/{genera}/ref_index/indexed_ref.pac"
+    params:
+        genera=config["genera"]
     log:
-        "results/SP/amplicon_alignment/logs/bwa_build/build.log"
+        "results/{genera}/logs/bwa_build/build.log"
     conda:
         "envs/read_aln.yaml"
     shell:
         """
-        mkdir -p results/SP/amplicon_alignment/bwa_build/ref_index/
-        bwa-mem2 index -p results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref {input.ref} > {log}
+        mkdir -p results/{genera}/ref_index/
+        bwa-mem2 index -p results/{genera}/ref_index/indexed_ref {input.ref} > {log}
         """
 
 rule bwa:
     """
-    Align raw reads to our indexed reference sequence
+    Align raw reads to our indexed refseq
     """
     input:
         fwd=lambda wildcards: READS[wildcards.sample]["r1"],
         rev=lambda wildcards: READS[wildcards.sample]["r2"],
         idx=[
-            "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.0123",
-            "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.amb",
-            "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.ann",
-            "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.bwt.2bit.64",
-            "results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref.pac"
+            "results/{genera}/ref_index/indexed_ref.0123",
+            "results/{genera}/ref_index/indexed_ref.amb",
+            "results/{genera}/ref_index/indexed_ref.ann",
+            "results/{genera}/ref_index/indexed_ref.bwt.2bit.64",
+            "results/{genera}/ref_index/indexed_ref.pac"
         ]
     output:
-        aligned_sorted_bam = "results/SP/amplicon_alignment/bwa/{sample}/{sample}_aligned_sorted.bam"
+        bam="results/{genera}/alignments/{sample}/{sample}_aligned_sorted.bam"
     conda:
         "envs/read_aln.yaml"
     shell: 
         """
-        bwa-mem2 mem -t 32 -p results/SP/amplicon_alignment/bwa_build/ref_index/indexed_ref {input.fwd} {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.aligned_sorted_bam} 
+        bwa-mem2 mem -t 32 -p results/{genera}/ref_index/indexed_ref {input.fwd} {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.bam} 
         """
 
 rule coverage_subsets:
@@ -69,17 +71,17 @@ rule coverage_subsets:
     Obtain coverage for untrimmed amplicon sequences in subsets
     """
     input:
-        "results/SP/amplicon_alignment/bwa/{sample}/{sample}_aligned_sorted.bam"
+        "results/{genera}/alignments/{sample}/{sample}_aligned_sorted.bam"
     params:
-        mapping_subset = lambda wildcards: float(wildcards.subset)
+        subset_vals = lambda wildcards: float(wildcards.subset)
     output:
-        subset_mapping = "results/SP/amplicon_alignment/coverage_subsets/{sample}/{sample}_{subset}_aligned_sorted.bam", 
-        subset_csv = "results/SP/amplicon_alignment/coverage_subsets/{sample}/{sample}_{subset}_aligned_sorted.csv"
+        subset_mapping = "results/{genera}/coverage_subsets/{sample}/{sample}_{subset}_aligned_sorted.bam", 
+        subset_csv = "results/{genera}/coverage_subsets/{sample}/{sample}_{subset}_aligned_sorted.csv"
     log:
-        "results/SP/amplicon_alignment/logs/coverage_subsets/{sample}_{subset}_aligned_sorted.log"
+        "results/{genera}/logs/coverage_subsets/{sample}_{subset}_aligned_sorted.log"
     conda:
         "envs/read_aln.yaml"
     shell:
         """
-        samtools view -@ 4 -b -F 4 -F 2048 -s {params.mapping_subset} {input} > {output.subset_mapping} && samtools coverage {output.subset_mapping} > {output.subset_csv} 2>> {log}
+        samtools view -@ 4 -b -F 4 -F 2048 -s {params.subset_vals} {input} > {output.subset_mapping} && samtools coverage {output.subset_mapping} > {output.subset_csv} 2>> {log}
         """

@@ -24,7 +24,7 @@ rule bwa_build:
     Create index of our refseq
     """
     input:
-        ref=config["coordinate_sequence"]
+        ref=config["ref"]
     output:
         "results/{genera}/ref_index/indexed_ref.0123",
         "results/{genera}/ref_index/indexed_ref.amb",

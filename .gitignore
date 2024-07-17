@@ -3,12 +3,16 @@ output.txt
 *.npy
 *.Rhistory
 
-# old genome annotation snakemake files and associated files 
+# old pangenome snakemake files and associated files 
 TB_prokka_roary.smk
 SP_prokka_roary.smk
 get_SP_paths.sh
 get_TB_paths.sh
 scripts/
+
+# old parnas files 
+SP_parnas.smk
+TB_parnas.smk
 
 # old envs
 roary_2.yaml

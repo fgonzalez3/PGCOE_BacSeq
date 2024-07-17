@@ -3,11 +3,11 @@ RADIUSES = set(config['radius'])
 
 rule all:
     input:
-        expand("results/{target}/parnas/representatives.txt", target=config["target"]), 
-        expand("results/{target}/parnas/{rad}/colors_tree.csv", rad = RADIUSES, target=config["target"]),
-        expand("results/{target}/parnas/{rad}/{rad}_cluster_reps.tab", rad = RADIUSES, target=config["target"]), 
-        expand("results/{target}/parnas/{rad}/colors_formatted.csv", rad = RADIUSES, target=config["target"]),
-        expand("results/{target}/parnas/{rad}/{rad}_subtree.tre", rad = RADIUSES, target=config["target"])
+        expand("results/{genera}/parnas/representatives.txt", genera=config["genera"]), 
+        expand("results/{genera}/parnas/{rad}/colors_tree.csv", rad = RADIUSES, genera=config["genera"]),
+        expand("results/{genera}/parnas/{rad}/{rad}_cluster_reps.tab", rad = RADIUSES, genera=config["genera"]), 
+        expand("results/{genera}/parnas/{rad}/colors_formatted.csv", rad = RADIUSES, genera=config["genera"]),
+        expand("results/{genera}/parnas/{rad}/{rad}_subtree.tre", rad = RADIUSES, genera=config["genera"])
 
 rule estimate_representative_number:
     """
@@ -16,10 +16,10 @@ rule estimate_representative_number:
     input:
         tree = config["tree"]
     output:
-        scores = "results/{target}/parnas/estimated_number_representatives.csv",
-        representatives = "results/{target}/parnas/representatives.txt",
-        colortree = "results/{target}/parnas/representative_strains.tre", 
-        subtree1 = "results/{target}/parnas/subtree.tre" 
+        scores = "results/{genera}/parnas/estimated_number_representatives.csv",
+        representatives = "results/{genera}/parnas/representatives.txt",
+        colortree = "results/{genera}/parnas/representative_strains.tre", 
+        subtree1 = "results/{genera}/parnas/subtree.tre" 
     params: 
         max_num = config["max_num"]
     shell:
@@ -37,7 +37,7 @@ rule create_diversity_figure:
     input:
         scores = rules.estimate_representative_number.output.scores
     output:
-        figure = "results/{target}/parnas/Estimated_Reps_Needed.jpg"
+        figure = "results/{genera}/parnas/Estimated_Reps_Needed.jpg"
     shell:
         r"""
         Rscript "scripts/estimate_reps_needed.R" --input {input.scores} --output {output.figure}
@@ -52,9 +52,9 @@ rule colortrees_with_radius:
     params:
         radius = "{rad}"
     output:
-        colors = "results/{target}/parnas/{rad}/colors_tree.csv",
-        reps = "results/{target}/parnas/{rad}/{rad}_cluster_reps.tab", 
-        subtree2 = "results/{target}/parnas/{rad}/{rad}_subtree.tre"
+        colors = "results/{genera}/parnas/{rad}/colors_tree.csv",
+        reps = "results/{genera}/parnas/{rad}/{rad}_cluster_reps.tab", 
+        subtree2 = "results/{genera}/parnas/{rad}/{rad}_subtree.tre"
     shell:
         """
         parnas -t {input.tree} --cover --radius {params.radius} \
@@ -70,7 +70,7 @@ rule combine_colortrees:
         colors = rules.colortrees_with_radius.output.colors, 
         reps = rules.colortrees_with_radius.output.reps
     output:
-        formatted = "results/{target}/parnas/{rad}/colors_formatted.csv"
+        formatted = "results/{genera}/parnas/{rad}/colors_formatted.csv"
     shell:
         r"""
         Rscript scripts/colorcombiner.R \

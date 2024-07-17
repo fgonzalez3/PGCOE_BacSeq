@@ -14,5 +14,5 @@ samples:
   JYGP01: seqs/SP/JYGP01.fasta
   NC_017592: seqs/SP/NC_017592.fasta
 
-target: "Streptococcus"
+genera: "SP"
 bed: "SP.scheme.primer.bed"

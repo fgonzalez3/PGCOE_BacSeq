@@ -15,11 +15,7 @@ rule all:
         expand("results/{genera}/primer_aln/bowtie_align/{sample}_fwd_aln.bam", sample=config["samples"], genera=config["genera"]),
         expand("results/{genera}/primer_aln/bowtie_align/{sample}_rev_aln.bam", sample=config["samples"], genera=config["genera"]),
         expand("results/{genera}/primer_aln/samtools_depth_indiv_primers/{sample}_fwd.depth", sample=config["samples"], genera=config["genera"]), 
-        expand("results/{genera}/primer_aln/samtools_depth_indiv_primers/{sample}_rev.depth", sample=config["samples"], genera=config["genera"]), 
-        expand("results/{genera}/primer_aln/samtools_merge/{sample}_merged.bam", sample=config["samples"], genera=config["genera"]),
-        expand("results/{genera}/primer_aln/samtools_depth/{sample}.depth", sample=config["samples"], genera=config["genera"]), 
-        #expand("results/{genera}/primer_aln/depth_vis/{sample}_depth.png", sample=config["samples"], genera=config["genera"]), 
-        expand("results/{genera}/primer_aln/coverage_pc/{sample}_coverage.csv", sample=config["samples"], genera=config["genera"])
+        expand("results/{genera}/primer_aln/samtools_depth_indiv_primers/{sample}_rev.depth", sample=config["samples"], genera=config["genera"])
 
 rule split_bed:
     """
@@ -119,65 +115,4 @@ rule fwd_rev_depth:
         """
         samtools depth -a {input.fwd_primer_alns} > {output.fwd_primer_depth}
         samtools depth -a {input.rev_primer_alns} > {output.rev_primer_depth}
-        """
-
-rule samtools_merge:
-    """
-    Merge BAM files to visualize both fwd and rev primer alns
-    """
-    input:
-        fwd=rules.bowtie_align.output.fwd_aln, 
-        rev=rules.bowtie_align.output.rev_aln
-    output:
-        merged_bam="results/{genera}/primer_aln/samtools_merge/{sample}_merged.bam"
-    conda:
-        "envs/read_aln.yaml"
-    shell:
-        """
-        samtools merge -o {output.merged_bam} {input.fwd} {input.rev}
-        """
-
-rule depth:
-    """
-    Calculate depth for fwd and rev primers in single BAM input
-    """
-    input:
-        primer_alns=rules.samtools_merge.output.merged_bam
-    output:
-        primer_depth="results/{genera}/primer_aln/samtools_depth/{sample}.depth"
-    conda:
-        "envs/read_aln.yaml"
-    shell:
-        """
-        samtools depth -a {input.primer_alns} > {output.primer_depth}
-        """
-
-#rule visualize_depth:
-    #"""
-    #Visualize depth for each primer alignment
-    #"""
-    #input:
-        #py_input=rules.depth.output.primer_depth
-    #output:
-        #"results/{genera}/primer_aln/depth_vis/{sample}_depth.png"
-    #conda:
-        #"envs/biopython.yaml"
-    #shell:
-        #"""
-        #python /vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/GitHub/pipelines/primer_alignment/scripts/plot_cov_primers.py {input.py_input} {output} 
-        #"""
-
-rule coverage:
-    """
-    Get percent coverage for each primer and rep pair
-    """
-    input:
-        "results/{genera}/primer_aln/samtools_merge/{sample}_merged.bam"
-    output:
-        "results/{genera}/primer_aln/coverage_pc/{sample}_coverage.csv"
-    conda:
-        "envs/read_aln.yaml"
-    shell:
-        """
-        samtools coverage {input} > {output}
         """

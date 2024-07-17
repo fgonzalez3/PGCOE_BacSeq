@@ -11,7 +11,7 @@ samples:
   GPSC4: seqs/SP/GPSC4_reference.fasta
   GPSC5: seqs/SP/GPSC5_reference.fasta
   GPSC8: seqs/SP/GPSC8_reference.fasta
-  JYGP01: seqs/SP/JYGP01.fasta
+  AP023349: seqs/SP/AP023349.fasta
   NC_017592: seqs/SP/NC_017592.fasta
 
 genera: "SP"

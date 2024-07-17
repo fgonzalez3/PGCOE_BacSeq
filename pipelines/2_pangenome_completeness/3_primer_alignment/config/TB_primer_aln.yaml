@@ -13,3 +13,6 @@ samples:
   SRR1180462: seqs/TB_reps/SRR1180462.fa  
   SRR671749: seqs/TB_reps/SRR671749.fa 
   SRR998654: seqs/TB_reps/SRR998654.fa
+
+target: "Mycobacterium"
+bed: "TB.scheme.primer.bed"

@@ -9,6 +9,7 @@ SP_prokka_roary.smk
 get_SP_paths.sh
 get_TB_paths.sh
 scripts/
+3_pangenome_creation/
 
 # old parnas files 
 SP_parnas.smk

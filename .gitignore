@@ -6,9 +6,9 @@ output.txt
 # old pangenome snakemake files and associated files 
 TB_prokka_roary.smk
 SP_prokka_roary.smk
-scripts/get_SP_paths.sh
-scripts/get_TB_paths.sh
-scripts/get_SP_TB_paths.sh
+pipelines/2_pangenome_completeness/1_pangenome/scripts/get_SP_paths.sh
+pipelines/2_pangenome_completeness/1_pangenome/scripts/get_TB_paths.sh
+pipelines/2_pangenome_completeness/1_pangenome/scripts/get_SP_TB_paths.sh
 pangenome_creation/
 
 # old parnas files 

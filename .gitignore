@@ -28,3 +28,5 @@ amp_vs_mNGS_cov.R
 # shell scripts for read alignment pipeline
 get_amp_paths.sh
 get_mNGS_paths.sh
+get_overall_coverage_stats.sh
+

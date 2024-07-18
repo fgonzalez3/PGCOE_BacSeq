@@ -1,4 +1,4 @@
 target: "Streptococcus"
 genera: "SP"
 ref: "seqs/SP/NC_017592.fasta"
-txt: "txt/SP_allseqs_paths.txt"
+txt: "txt/SP_allseqs.txt"

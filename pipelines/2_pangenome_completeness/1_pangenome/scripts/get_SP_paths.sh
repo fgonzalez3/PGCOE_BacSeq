@@ -6,7 +6,7 @@
 GPSC_dir="/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/GitHub/pipelines/genome_annotation/seqs/SP/"
 
 # Output CSV file
-output_file="SP_seqs.tsv"
+output_file="SP_allseqs.tsv"
 
 # Write the header line
 echo -e "sample_id\tseq_path" > $output_file
@@ -25,7 +25,7 @@ done
 GPSC_dir="/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/GitHub/pipelines/genome_annotation/seqs/SP/"
 
 # Output text file
-output_file="SP_seqs_paths.txt"
+output_file="SP_allseqs.txt"
 
 # Loop over the fasta files in GPSCs dir and write their paths to the output file
 for fasta_file in $GPSC_dir*.fasta; do

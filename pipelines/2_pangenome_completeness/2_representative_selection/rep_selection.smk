@@ -3,18 +3,35 @@ RADIUSES = set(config['radius'])
 
 rule all:
     input:
+        expand("results/{genera}/parnas/reduced_tree.newick", genera=config["genera"]),
         expand("results/{genera}/parnas/representatives.txt", genera=config["genera"]), 
         expand("results/{genera}/parnas/{rad}/colors_tree.csv", rad = RADIUSES, genera=config["genera"]),
         expand("results/{genera}/parnas/{rad}/{rad}_cluster_reps.tab", rad = RADIUSES, genera=config["genera"]), 
         expand("results/{genera}/parnas/{rad}/colors_formatted.csv", rad = RADIUSES, genera=config["genera"]),
         expand("results/{genera}/parnas/{rad}/{rad}_subtree.tre", rad = RADIUSES, genera=config["genera"])
 
+rule reduce_tree:
+    """
+    Remove refseq and outgroup from tree for rep selection
+    """
+    input:
+        tree=config["tree"]
+    output:
+        reduced_tree="results/{genera}/parnas/reduced_tree.newick"
+    params:
+        ref=config["ref"],
+        outgroup=config["outgroup"]
+    shell:
+        r"""
+        Rscript scripts/reduce_tree.R {input.tree} {output.reduced_tree} {params.ref} {params.outgroup}
+        """
+
 rule estimate_representative_number:
     """
     This estimates how many representatives is sufficient to maximally cover diversity
     """
     input:
-        tree = config["tree"]
+        rules.reduce_tree.output.reduced_tree
     output:
         scores = "results/{genera}/parnas/estimated_number_representatives.csv",
         representatives = "results/{genera}/parnas/representatives.txt",
@@ -24,7 +41,7 @@ rule estimate_representative_number:
         max_num = config["max_num"]
     shell:
         """
-        parnas -t {input.tree} -n {params.max_num} \
+        parnas -t {input} -n {params.max_num} \
         --diversity {output.scores} > {output.representatives} \
         --color {output.colortree} \
         --subtree {output.subtree1} 
@@ -48,7 +65,7 @@ rule colortrees_with_radius:
     Find a minimum number of representatives that cover most of the diversity across our tree
     """
     input:
-        tree = config["tree"] 
+        rules.reduce_tree.output.reduced_tree
     params:
         radius = "{rad}"
     output:
@@ -57,7 +74,7 @@ rule colortrees_with_radius:
         subtree2 = "results/{genera}/parnas/{rad}/{rad}_subtree.tre"
     shell:
         """
-        parnas -t {input.tree} --cover --radius {params.radius} \
+        parnas -t {input} --cover --radius {params.radius} \
         --subtree {output.subtree2} \
         --clusters {output.colors} > {output.reps} \
         """

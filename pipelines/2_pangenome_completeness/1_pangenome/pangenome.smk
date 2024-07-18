@@ -1,8 +1,8 @@
 import pandas as pd
 
-configfile: "config/TB_pangenome.yaml"
+configfile: "config/SP_pangenome.yaml"
 
-samples_df = pd.read_csv("tsv/TB_allseqs.tsv", sep="\t")
+samples_df = pd.read_csv("tsv/SP_allseqs.tsv", sep="\t")
 SAMPLES = samples_df["sample_id"].tolist()
 SEQ = {row.sample_id: {"sample_id": row.sample_id, "seq": row.seq_path} for row in samples_df.itertuples()} 
 
@@ -11,7 +11,8 @@ rule all:
         expand("results/{genera}/prokka/{sample}/{sample}.gff", genera=config["genera"],sample=SAMPLES),
         expand("results/{genera}/roary/core_gene_alignment.aln", genera=config["genera"]),
         expand("results/{genera}/roary/gene_presence_absence.csv", genera=config["genera"]),
-        expand("results/{genera}/roary/tree.newick", genera=config["genera"])
+        expand("results/{genera}/roary/tree.newick", genera=config["genera"]), 
+        expand("results/{genera}/fastani/fastani.out", genera=config["genera"])
 
 rule prokka:
     """

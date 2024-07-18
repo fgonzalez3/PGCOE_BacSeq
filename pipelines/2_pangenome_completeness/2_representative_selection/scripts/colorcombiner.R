@@ -33,7 +33,6 @@ n_per_rep <- all_relabeled %>%
   summarise(number=n())
 
 write.table(all_relabeled,xargs$output,quote=FALSE,row.names=FALSE,sep="\t")
-write.table(n_per_rep,"/vast/palmer/scratch/turner/flg9/snakemake_workflows/pangenome_alignment/GitHub/pipelines/SP/parnas/results/SP/parnas/num_per_rep.tsv",quote=FALSE,row.names=FALSE,sep="\t")
 
 
 

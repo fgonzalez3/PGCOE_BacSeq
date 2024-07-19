@@ -102,35 +102,45 @@ get_pangenome_plot <- function(pangenomefile, divergencefile, treefile) {
   panplot
 }
 
-
 get_amplicon_plot <- function(assemblyfile, ampliconfile, treefile) {
   # plot amplicon mappings --------------------------------------------------
   
-  maxlen=4.45e6
+  maxlen = 4.45e6
   
   treeorder <- get_tree_order(treefile)
   
-  assembly_lengths <- read.csv(assemblyfile,header=F,col.names=c("strain","start","end")) %>%
-    mutate(strain = factor(strain,ordered=T,levels=treeorder)) %>%
-    mutate(y = as.numeric(strain)-0.5)
+  assembly_lengths <- read.csv(assemblyfile, header = FALSE, col.names = c("strain", "start", "end")) %>%
+    mutate(strain = factor(strain, ordered = TRUE, levels = treeorder)) %>%
+    mutate(y = as.numeric(strain) - 0.5)
   
-  ampmap <- read.csv(ampliconfile,col.names = c("strain","start","end","panel")) %>%
-                mutate(strain = factor(strain,ordered=T,levels=treeorder)) %>%
-                mutate(y = as.numeric(strain)-1 + (panel-1)*0.5)
+  ampmap <- read.csv(ampliconfile, col.names = c("strain", "start", "end", "panel")) %>%
+    mutate(strain = factor(strain, ordered = TRUE, levels = treeorder)) %>%
+    mutate(panel = sapply(panel, function(primer_type) {
+      if (primer_type == "fwd") {
+        return(1)
+      } else if (primer_type == "rev") {
+        return(2)
+      } else {
+        return(NA)
+      }
+    })) %>%  
+    mutate(y = as.numeric(strain) - 1 + (panel - 1) * 0.5)
   
-  ampplot <- ggplot(ampmap,aes(xmin=start,xmax=end,ymin=y+0.05,ymax=y+0.45)) + geom_rect() + 
-    geom_segment(data=assembly_lengths,aes(x=start,xend=end,y=y,yend=y)) + 
-    scale_y_continuous(breaks=seq(0.5,length(treeorder),1),labels=treeorder,
-                       limits=c(0,length(treeorder)),expand=c(0,0)) + 
-    scale_x_continuous(limits=c(0,maxlen), breaks=seq(0,maxlen,5e5),labels=\(x) x/1e6,expand=c(0,0)) + 
-    xlab("genome position (mb)")+
-    theme(axis.text.y=element_blank(),
-          axis.ticks.y=element_blank(),
-          axis.title.y=element_blank(),
-          panel.background=element_blank(),panel.grid = element_blank(),
-          plot.title = element_text(hjust = 0.5))+
+  ampplot <- ggplot(ampmap, aes(xmin = start, xmax = end, ymin = y + 0.05, ymax = y + 0.45)) + 
+    geom_rect() + 
+    geom_segment(data = assembly_lengths, aes(x = start, xend = end, y = y, yend = y)) + 
+    scale_y_continuous(breaks = seq(0.5, length(treeorder), 1), labels = treeorder,
+                       limits = c(0, length(treeorder)), expand = c(0, 0)) + 
+    scale_x_continuous(limits = c(0, maxlen), breaks = seq(0, maxlen, 5e5), labels = \(x) x / 1e6, expand = c(0, 0)) + 
+    xlab("genome position (mb)") +
+    theme(axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.title.y = element_blank(),
+          panel.background = element_blank(), panel.grid = element_blank(),
+          plot.title = element_text(hjust = 0.5)) +
     ggtitle("amplicon coverage")
-  ampplot
+  
+  return(ampplot)
 }
 
 # assemble combined plots -------------------------------------------------
@@ -144,10 +154,9 @@ TB_treeplot <- get_tree_plot(TB_treefile)
 TB_panplot <- get_pangenome_plot(TB_pangenomefile, TB_divergencefile, TB_treefile)
 TB_ampplot <- get_amplicon_plot(TB_assemblyfile, TB_ampliconfile, TB_treefile)
 
-
 SP_treeplot + SP_panplot + SP_ampplot + 
 TB_treeplot + TB_panplot + TB_ampplot + 
   plot_layout(widths=c(2.5,3,3),ncol=3)
 
-#ggsave(outpng, width=350,height=275,dpi=400,units="mm")
+ggsave(outpng, width=350,height=275,dpi=400,units="mm")
 ggsave(outpdf, width=350,height=275,dpi=400,units="mm")

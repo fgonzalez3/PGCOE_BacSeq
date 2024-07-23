@@ -2,6 +2,8 @@ output.txt
 *.DS_Store
 *.npy
 *.Rhistory
+*.fa
+*.fasta
 
 # old pangenome snakemake files and associated files 
 TB_prokka_roary.smk

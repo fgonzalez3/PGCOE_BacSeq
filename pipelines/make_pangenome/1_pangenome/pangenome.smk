@@ -1,8 +1,8 @@
 import pandas as pd
 
-configfile: "config/SP_pangenome.yaml"
+configfile: "config/TB_pangenome.yaml"
 
-samples_df = pd.read_csv("tsv/SP_reps.tsv", sep="\t")
+samples_df = pd.read_csv("tsv/TB_reps.tsv", sep="\t")
 SAMPLES = samples_df["sample_id"].tolist()
 SEQ = {row.sample_id: {"sample_id": row.sample_id, "seq": row.seq_path} for row in samples_df.itertuples()} 
 

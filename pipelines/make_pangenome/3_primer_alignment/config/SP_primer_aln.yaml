@@ -33,7 +33,7 @@ samples:
   GPSC34: seqs/SP/GPSC34_reference.fasta
   NC_017592: seqs/SP/NC_017592.fasta
   GPSC21: seqs/SP/GPSC21_reference.fasta
-  GPSC37: seqs/SP/GPSC37_reference.fasta 
+  GPSC37: seqs/SP/GPSC37_reference.fasta
 
 genera: "SP"
 bed: "SP.scheme.primer.bed"

@@ -1,4 +1,4 @@
-configfile: "config/SP_primer_aln_reps.yaml"
+configfile: "config/TB_primer_aln_reps.yaml"
 
 rule all:
     input:

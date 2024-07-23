@@ -6,6 +6,7 @@ output.txt
 *.fasta
 *.ipynb_checkpoints
 *.depth
+*.snakemake
 
 # old pangenome snakemake files and associated files 
 TB_prokka_roary.smk

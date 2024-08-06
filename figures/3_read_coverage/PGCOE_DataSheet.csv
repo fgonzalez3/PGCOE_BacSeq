@@ -1,4 +1,4 @@
-﻿sample,Original_ID,Sample_Type,Sample_Dilution,PCR_Primer_Scheme,Primer_Conc,NGS_Prep_Method,NGS_Run_Date,Qubit_Pool1,Qubit_Pool2,Ct1,Ct2,Method
+﻿Seq_ID,Original_ID,Sample_Type,Sample_Dilution,PCR_Primer_Scheme,Primer_Conc,NGS_Prep_Method,NGS_Run_Date,Qubit_Pool1,Qubit_Pool2,Ct1,Ct2,Method
 NEC,NEC,,,Hybrid PCR v1.2,,Hybrid COVIDseq,,,,,,Ampllicon
 Yale-CS00029,CDC,Culture isolate,1.00E-03,Hybrid PCR v1.2,10uM,Hybrid COVIDseq,4/13/23,45,26.6,,,Ampllicon
 Yale-CS00030,CDC,Culture isolate,1.00E-03,Hybrid PCR v1.2,100uM,Hybrid COVIDseq,4/13/23,75.2,95,23.5,23.9,Ampllicon

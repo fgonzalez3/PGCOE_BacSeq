@@ -42,49 +42,49 @@ Yale-CS00073,H141,Culture isolate,1.00E-05,Hybrid PCR v1.2,100uM,Hybrid COVIDseq
 Yale-CS00074,H141,Culture isolate,1.00E-06,Hybrid PCR v1.2,100uM,Hybrid COVIDseq,5/11/23,,,30.83,31.61,Ampllicon
 Yale-CS00075,H141,Culture isolate,1.00E-07,Hybrid PCR v1.2,100uM,Hybrid COVIDseq,5/11/23,,,34.38,35.69,Ampllicon
 Yale-CS00076,H141,Culture isolate,1.00E-08,Hybrid PCR v1.2,100uM,Hybrid COVIDseq,5/11/23,,,38.31,38.52,Ampllicon
-Yale-CS00153,A889-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,64.8,,25.22,,Ampllicon
-Yale-CS00154,B042-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,73.6,,27.16,,Ampllicon
-Yale-CS00155,C677-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,74.4,,24.67,,Ampllicon
-Yale-CS00156,W1526-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,75.8,,30.63,,Ampllicon
-Yale-CS00157,W1527-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,70.2,,34.72,,Ampllicon
-Yale-CS00158,W1695-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,68.2,,28.29,,Ampllicon
-Yale-CS00159,W3317-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,84.2,,29.21,,Ampllicon
-Yale-CS00160,W3371-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,81.2,,31.76,,Ampllicon
-Yale-CS00161,W4034-CE,Culture enriched,,,100uM,COVIDseq,7/27/23,75.4,,26.69,,Ampllicon
-Yale-CS00162,A889-S,Saliva,,,100uM,COVIDseq,7/27/23,69.4,,25.97,,Ampllicon
-Yale-CS00163,B042-S,Saliva,,,100uM,COVIDseq,7/27/23,63,,30.86,,Ampllicon
-Yale-CS00164,C677-S,Saliva,,,100uM,COVIDseq,7/27/23,59.8,,28.78,,Ampllicon
-Yale-CS00165,W1526-S,Saliva,,,100uM,COVIDseq,7/27/23,60.6,,37.56,,Ampllicon
-Yale-CS00166,W1527-S,Saliva,,,100uM,COVIDseq,7/27/23,69.6,,34.4,,Ampllicon
-Yale-CS00167,W1695-S,Saliva,,,100uM,COVIDseq,7/27/23,71.8,,38.32,,Ampllicon
-Yale-CS00168,W3317-S,Saliva,,,100uM,COVIDseq,7/27/23,66.4,,32.22,,Ampllicon
-Yale-CS00169,W3371-S,Saliva,,,100uM,COVIDseq,7/27/23,61.2,,35.53,,Ampllicon
-Yale-CS00170,W4034-S,Saliva,,,100uM,COVIDseq,7/27/23,64.2,,33.04,,Ampllicon
-Yale-CS00171,A889-NP,NP swab,,,100uM,COVIDseq,7/27/23,45,,,,Ampllicon
-Yale-CS00172,B042-NP,NP swab,,,100uM,COVIDseq,7/27/23,56.8,,,,Ampllicon
-Yale-CS00173,C677-NP,NP swab,,,100uM,COVIDseq,7/27/23,55.8,,,,Ampllicon
-Yale-CS00174,W1527-CI,Culture isolate,,,100uM,COVIDseq,7/27/23,80,,13.21,,Ampllicon
-Yale-CS00175,W3317-CI,Culture isolate,,,100uM,COVIDseq,7/27/23,85.8,,13.06,,Ampllicon
-Yale-CS00176,W4034-CI,Culture isolate,,,100uM,COVIDseq,7/27/23,86.8,,15.52,,Ampllicon
-Yale-CS00177,B013-S,Saliva,,,100uM,COVIDseq,7/27/23,60.4,,,,Ampllicon
-Yale-CS00178,B595-S,Saliva,,,100uM,COVIDseq,7/27/23,68.2,,,,Ampllicon
-Yale-CS00179,B015-S,Saliva,,,100uM,COVIDseq,7/27/23,63.2,,,,Ampllicon
-Yale-CS00180,W1987-S,Saliva,,,100uM,COVIDseq,7/27/23,66.2,,,,Ampllicon
-Yale-CS00181,B687-S,Saliva,,,100uM,COVIDseq,7/27/23,61.4,,,,Ampllicon
-Yale-CS00182,W1075-S,Saliva,,,100uM,COVIDseq,7/27/23,61,,,,Ampllicon
-Yale-CS00183,B687N-NP,NP swab,,,100uM,COVIDseq,7/27/23,55.8,,,,Ampllicon
-Yale-CS00184,B013N-NP,NP swab,,,100uM,COVIDseq,7/27/23,59.2,,,,Ampllicon
-Yale-CS00185,B015N-NP,NP swab,,,100uM,COVIDseq,7/27/23,52,,,,Ampllicon
-Yale-CS00186,B595,DNA,,,100uM,COVIDseq,7/27/23,80.8,,,,Ampllicon
-Yale-CS00187,B013,DNA,,,100uM,COVIDseq,7/27/23,79,,,,Ampllicon
-Yale-CS00188,B015,DNA,,,100uM,COVIDseq,7/27/23,78.4,,,,Ampllicon
-Yale-CS00189,W1075,DNA,,,100uM,COVIDseq,7/27/23,76.4,,,,Ampllicon
-Yale-CS00190,W2987,DNA,,,100uM,COVIDseq,7/27/23,81.4,,,,Ampllicon
-Yale-CS00191,B687,Unknown,,,100uM,COVIDseq,7/27/23,85.4,,,,Ampllicon
-Yale-CS00192,NEC1,Water,,,100uM,COVIDseq,7/27/23,58,,,,Ampllicon
-Yale-CS00193,NEC2,Water,,,100uM,COVIDseq,7/27/23,56,,,,Ampllicon
-Yale-CS00194,NEC3,Water,,,100uM,COVIDseq,7/27/23,53.2,,,,Ampllicon
-Yale-CS00195,NEC4,Water,,,100uM,COVIDseq,7/27/23,50.2,,,,Ampllicon
+Yale-CS00153,A889-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,64.8,,25.22,,Ampllicon
+Yale-CS00154,B042-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,73.6,,27.16,,Ampllicon
+Yale-CS00155,C677-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,74.4,,24.67,,Ampllicon
+Yale-CS00156,W1526-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,75.8,,30.63,,Ampllicon
+Yale-CS00157,W1527-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,70.2,,34.72,,Ampllicon
+Yale-CS00158,W1695-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,68.2,,28.29,,Ampllicon
+Yale-CS00159,W3317-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,84.2,,29.21,,Ampllicon
+Yale-CS00160,W3371-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,81.2,,31.76,,Ampllicon
+Yale-CS00161,W4034-CE,Culture enriched,1.00E-03,,100uM,COVIDseq,7/27/23,75.4,,26.69,,Ampllicon
+Yale-CS00162,A889-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,69.4,,25.97,,Ampllicon
+Yale-CS00163,B042-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,63,,30.86,,Ampllicon
+Yale-CS00164,C677-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,59.8,,28.78,,Ampllicon
+Yale-CS00165,W1526-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,60.6,,37.56,,Ampllicon
+Yale-CS00166,W1527-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,69.6,,34.4,,Ampllicon
+Yale-CS00167,W1695-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,71.8,,38.32,,Ampllicon
+Yale-CS00168,W3317-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,66.4,,32.22,,Ampllicon
+Yale-CS00169,W3371-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,61.2,,35.53,,Ampllicon
+Yale-CS00170,W4034-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,64.2,,33.04,,Ampllicon
+Yale-CS00171,A889-NP,NP swab,1.00E-03,,100uM,COVIDseq,7/27/23,45,,,,Ampllicon
+Yale-CS00172,B042-NP,NP swab,1.00E-03,,100uM,COVIDseq,7/27/23,56.8,,,,Ampllicon
+Yale-CS00173,C677-NP,NP swab,1.00E-03,,100uM,COVIDseq,7/27/23,55.8,,,,Ampllicon
+Yale-CS00174,W1527-CI,Culture isolate,1.00E-03,,100uM,COVIDseq,7/27/23,80,,13.21,,Ampllicon
+Yale-CS00175,W3317-CI,Culture isolate,1.00E-03,,100uM,COVIDseq,7/27/23,85.8,,13.06,,Ampllicon
+Yale-CS00176,W4034-CI,Culture isolate,1.00E-03,,100uM,COVIDseq,7/27/23,86.8,,15.52,,Ampllicon
+Yale-CS00177,B013-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,60.4,,,,Ampllicon
+Yale-CS00178,B595-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,68.2,,,,Ampllicon
+Yale-CS00179,B015-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,63.2,,,,Ampllicon
+Yale-CS00180,W1987-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,66.2,,,,Ampllicon
+Yale-CS00181,B687-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,61.4,,,,Ampllicon
+Yale-CS00182,W1075-S,Saliva,1.00E-03,,100uM,COVIDseq,7/27/23,61,,,,Ampllicon
+Yale-CS00183,B687N-NP,NP swab,1.00E-03,,100uM,COVIDseq,7/27/23,55.8,,,,Ampllicon
+Yale-CS00184,B013N-NP,NP swab,1.00E-03,,100uM,COVIDseq,7/27/23,59.2,,,,Ampllicon
+Yale-CS00185,B015N-NP,NP swab,1.00E-03,,100uM,COVIDseq,7/27/23,52,,,,Ampllicon
+Yale-CS00186,B595,DNA,1.00E-03,,100uM,COVIDseq,7/27/23,80.8,,,,Ampllicon
+Yale-CS00187,B013,DNA,1.00E-03,,100uM,COVIDseq,7/27/23,79,,,,Ampllicon
+Yale-CS00188,B015,DNA,1.00E-03,,100uM,COVIDseq,7/27/23,78.4,,,,Ampllicon
+Yale-CS00189,W1075,DNA,1.00E-03,,100uM,COVIDseq,7/27/23,76.4,,,,Ampllicon
+Yale-CS00190,W2987,DNA,1.00E-03,,100uM,COVIDseq,7/27/23,81.4,,,,Ampllicon
+Yale-CS00191,B687,Unknown,1.00E-03,,100uM,COVIDseq,7/27/23,85.4,,,,Ampllicon
+Yale-CS00192,NEC1,Water,1.00E-03,,100uM,COVIDseq,7/27/23,58,,,,Ampllicon
+Yale-CS00193,NEC2,Water,1.00E-03,,100uM,COVIDseq,7/27/23,56,,,,Ampllicon
+Yale-CS00194,NEC3,Water,1.00E-03,,100uM,COVIDseq,7/27/23,53.2,,,,Ampllicon
+Yale-CS00195,NEC4,Water,1.00E-03,,100uM,COVIDseq,7/27/23,50.2,,,,Ampllicon
 Yale-SP00001,CDC,Culture isolate,1.00E-03,231016_bacseq,100uM,COVIDseq,11/2/23,107,,,,Ampllicon
 Yale-SP00002,CDC,Culture isolate,1.00E-04,231016_bacseq,100uM,COVIDseq,11/2/23,19.4,,,,Ampllicon
 Yale-SP00003,CDC,Culture isolate,1.00E-05,231016_bacseq,100uM,COVIDseq,11/2/23,6.4,,,,Ampllicon
@@ -125,32 +125,32 @@ Yale-SP00037,CDC,Culture isolate,1.00E-07,231016_bacseq,0.05uM,COVIDseq,11/2/23,
 Yale-SP00038,CDC,Culture isolate,1.00E-08,231016_bacseq,0.05uM,COVIDseq,11/2/23,0.1,,,,Ampllicon
 Yale-SP00039,PCR_ctrl016i,Water,,231016_bacseq,0.05uM,COVIDseq,11/2/23,0.1,,,,Ampllicon
 Yale-SP00040,PCR_ctrl016j,Water,,231016_bacseq,0.05uM,COVIDseq,11/2/23,0.1,,,,Ampllicon
-Yale-SP00041,A889-NP,NP swab,,mNGS,,Nextera XT (GLab),10/31/23,4.54,Contaminated ,,,mNGS
-Yale-SP00042,B042-NP,NP swab,,mNGS,,Nextera XT (GLab),10/31/23,7.88,Contaminated ,,,mNGS
-Yale-SP00043,C677-NP,NP swab,,mNGS,,Nextera XT (GLab),10/31/23,10.7,Contaminated ,,,mNGS
-Yale-SP00044,A889-S,Saliva,,mNGS,,Nextera XT (GLab),10/31/23,17.5,Contaminated ,,,mNGS
-Yale-SP00045,B042-S,Saliva,,mNGS,,Nextera XT (GLab),10/31/23,16.2,Contaminated ,,,mNGS
-Yale-SP00046,C677-S,Saliva,,mNGS,,Nextera XT (GLab),10/31/23,17.8,Contaminated ,,,mNGS
-Yale-SP00047,W1527-CI,Culture isolate,,mNGS,,Nextera XT (GLab),10/31/23,19.8,Contaminated ,,,mNGS
-Yale-SP00048,W3317-CI,Culture isolate,,mNGS,,Nextera XT (GLab),10/31/23,20.8,Contaminated ,,,mNGS
-Yale-SP00049,W4034-CI,Culture isolate,,mNGS,,Nextera XT (GLab),10/31/23,15.1,Contaminated ,,,mNGS
-Yale-SP00050,NTC3,Water,,mNGS,,Nextera XT (GLab),10/31/23,<0.1,Contaminated ,,,mNGS
-Yale-SP00051,A889-NP,NP swab,,mNGS,,Nextera XT (GLab),,9.66,,,,mNGS
-Yale-SP00052,B042-NP,NP swab,,mNGS,,Nextera XT (GLab),,8.26,,,,mNGS
-Yale-SP00053,C677-NP,NP swab,,mNGS,,Nextera XT (GLab),,11.5,,,,mNGS
-Yale-SP00054,A889-S,Saliva,,mNGS,,Nextera XT (GLab),,0.172,,25.97,,mNGS
-Yale-SP00055,B042-S,Saliva,,mNGS,,Nextera XT (GLab),,7.54,,30.86,,mNGS
-Yale-SP00056,C677-S,Saliva,,mNGS,,Nextera XT (GLab),,0.656,,28.78,,mNGS
-Yale-SP00057,W1527-CI,Culture isolate,,mNGS,,Nextera XT (GLab),,27.2,,13.21,,mNGS
-Yale-SP00058,W3317-CI,Culture isolate,,mNGS,,Nextera XT (GLab),,9.4,,13.06,,mNGS
-Yale-SP00059,W4034-CI,Culture isolate,,mNGS,,Nextera XT (GLab),,25.4,,15.52,,mNGS
-Yale-SP00060,NTC3,Water,,mNGS,,Nextera XT (GLab),,<0.1,,,,mNGS
-Yale-SP00061,A889-NP,NP swab,,,100uM,COVIDseq,,83.8,73.4,,,Ampllicon
-Yale-SP00062,B042-NP,NP swab,,,100uM,COVIDseq,,82.2,84.2,,,Ampllicon
-Yale-SP00063,C677-NP,NP swab,,,100uM,COVIDseq,,80,79.8,,,Ampllicon
-Yale-SP00064,A889-S,Saliva,,,100uM,COVIDseq,,79.8,87.6,25.97,,Ampllicon
-Yale-SP00065,B042-S,Saliva,,,100uM,COVIDseq,,75,81.8,30.86,,Ampllicon
-Yale-SP00066,C677-S,Saliva,,,100uM,COVIDseq,,73.8,75.8,28.78,,Ampllicon
-Yale-SP00067,CDC,Culture isolate,,,100uM,COVIDseq,,74.4,75.8,23.5,,Ampllicon
-Yale-SP00068,H141,Culture isolate,,,100uM,COVIDseq,,83.4,78.6,21.2,,Ampllicon
-Yale-SP00069,NTC,Water,,,100uM,COVIDseq,,75,78,,,Ampllicon
+Yale-SP00041,A889-NP,NP swab,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,4.54,Contaminated ,,,mNGS
+Yale-SP00042,B042-NP,NP swab,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,7.88,Contaminated ,,,mNGS
+Yale-SP00043,C677-NP,NP swab,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,10.7,Contaminated ,,,mNGS
+Yale-SP00044,A889-S,Saliva,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,17.5,Contaminated ,,,mNGS
+Yale-SP00045,B042-S,Saliva,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,16.2,Contaminated ,,,mNGS
+Yale-SP00046,C677-S,Saliva,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,17.8,Contaminated ,,,mNGS
+Yale-SP00047,W1527-CI,Culture isolate,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,19.8,Contaminated ,,,mNGS
+Yale-SP00048,W3317-CI,Culture isolate,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,20.8,Contaminated ,,,mNGS
+Yale-SP00049,W4034-CI,Culture isolate,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,15.1,Contaminated ,,,mNGS
+Yale-SP00050,NTC3,Water,1.00E-03,mNGS,100uM,Nextera XT (GLab),10/31/23,<0.1,Contaminated ,,,mNGS
+Yale-SP00051,A889-NP,NP swab,1.00E-03,mNGS,100uM,Nextera XT (GLab),,9.66,,,,mNGS
+Yale-SP00052,B042-NP,NP swab,1.00E-03,mNGS,100uM,Nextera XT (GLab),,8.26,,,,mNGS
+Yale-SP00053,C677-NP,NP swab,1.00E-03,mNGS,100uM,Nextera XT (GLab),,11.5,,,,mNGS
+Yale-SP00054,A889-S,Saliva,1.00E-03,mNGS,100uM,Nextera XT (GLab),,0.172,,25.97,,mNGS
+Yale-SP00055,B042-S,Saliva,1.00E-03,mNGS,100uM,Nextera XT (GLab),,7.54,,30.86,,mNGS
+Yale-SP00056,C677-S,Saliva,1.00E-03,mNGS,100uM,Nextera XT (GLab),,0.656,,28.78,,mNGS
+Yale-SP00057,W1527-CI,Culture isolate,1.00E-03,mNGS,100uM,Nextera XT (GLab),,27.2,,13.21,,mNGS
+Yale-SP00058,W3317-CI,Culture isolate,1.00E-03,mNGS,100uM,Nextera XT (GLab),,9.4,,13.06,,mNGS
+Yale-SP00059,W4034-CI,Culture isolate,1.00E-03,mNGS,100uM,Nextera XT (GLab),,25.4,,15.52,,mNGS
+Yale-SP00060,NTC3,Water,1.00E-03,mNGS,100uM,Nextera XT (GLab),,<0.1,,,,mNGS
+Yale-SP00061,A889-NP,NP swab,1.00E-03,,100uM,COVIDseq,,83.8,73.4,,,Ampllicon
+Yale-SP00062,B042-NP,NP swab,1.00E-03,,100uM,COVIDseq,,82.2,84.2,,,Ampllicon
+Yale-SP00063,C677-NP,NP swab,1.00E-03,,100uM,COVIDseq,,80,79.8,,,Ampllicon
+Yale-SP00064,A889-S,Saliva,1.00E-03,,100uM,COVIDseq,,79.8,87.6,25.97,,Ampllicon
+Yale-SP00065,B042-S,Saliva,1.00E-03,,100uM,COVIDseq,,75,81.8,30.86,,Ampllicon
+Yale-SP00066,C677-S,Saliva,1.00E-03,,100uM,COVIDseq,,73.8,75.8,28.78,,Ampllicon
+Yale-SP00067,CDC,Culture isolate,1.00E-03,,100uM,COVIDseq,,74.4,75.8,23.5,,Ampllicon
+Yale-SP00068,H141,Culture isolate,1.00E-03,,100uM,COVIDseq,,83.4,78.6,21.2,,Ampllicon
+Yale-SP00069,NTC,Water,1.00E-03,,100uM,COVIDseq,,75,78,,,Ampllicon

@@ -2,7 +2,7 @@ import pandas as pd
 
 configfile: "config/SP_read_aln.yaml"
 
-samples_df = pd.read_csv("tsv/SP_amplicons.tsv", sep="\t")
+samples_df = pd.read_csv("tsv/SP_amplicon_samples.tsv", sep="\t")
 SAMPLES = samples_df["sample_id"].tolist()
 READS = {row.sample_id: {"r1": row.r1, "r2": row.r2} for row in samples_df.itertuples()}
 
@@ -40,7 +40,7 @@ rule bwa_build:
     shell:
         """
         mkdir -p results/{params.genera}/ref_index/
-        bwa-mem2 index -p results/{params.genera}/ref_index/indexed_ref {input.ref} > {log}
+        bwa-mem2 index {input.ref} -p results/{params.genera}/ref_index/indexed_ref > {log} 2>&1
         """
 
 rule bwa:
@@ -65,7 +65,8 @@ rule bwa:
         genera=config["genera"]
     shell: 
         """
-        bwa-mem2 mem -t 32 -p results/{params.genera}/ref_index/indexed_ref {input.fwd} {input.rev} | samtools view -b -F 4 -F 2048 | samtools sort -o {output.bam} 
+        bwa-mem2 mem -t 32 results/{params.genera}/ref_index/indexed_ref {input.fwd} {input.rev} > results/{params.genera}/alignments/{wildcards.sample}/{wildcards.sample}_aligned.sam
+        samtools view -h -b -F 4 -F 2048 results/{params.genera}/alignments/{wildcards.sample}/{wildcards.sample}_aligned.sam | samtools sort -o {output.bam}
         """
 
 rule coverage_subsets:

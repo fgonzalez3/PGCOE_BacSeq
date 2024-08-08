@@ -15,10 +15,11 @@ TB_amp_cov  <- "data/TB_combined_coverage.tsv"
 SP_metadat  <- "metadata/PGCOE_DataSheet - S. pneumoniae.csv"
 TB_metadat  <- "metadata/PGCOE_Datasheet - M.tuberculosis_Seq.csv"
 
-outpng      <- "Fig3_combined_coverage_plot.png"
+sp_outpng      <- "Fig3_coverage_by_sample_type_SP.png"
+combined_out   <- "Fig3_combined_coverage_plot.png"
 
 
-# s.pneumo sample type coverage plot -------------------------------------------
+# s.pneumo data manipulation ---------------------------------------------------
 
 process_data <- function(metadata_path, amp_cov_path, mngs_cov_path) {
   
@@ -96,38 +97,106 @@ process_data <- function(metadata_path, amp_cov_path, mngs_cov_path) {
   
   # return
   list(SP_metadat = SP_metadat, SP_amp_cov = SP_amp_cov, SP_mngs_cov = SP_mngs_cov, SP_merged = SP_merged)
+  
 }
 
-plot_sample_types <- function(data) {
+# s. pneumo coverage by sample type plot ---------------------------------------
+
+plot_sample_types <- function(SP_merged) {
   
-  # Filter the data
-  SP_merged_filtered <- data %>%
+  # filter
+  SP_merged_filtered <- SP_merged %>%
     filter(Sample_Dilution == "0.001" & 
              Primer_Conc == "100uM" & 
              (subsample == "1" | subsample == "1.0") & 
              !is.na(Ct1) & 
              Seq_ID != "CS00163")
   
-  # Plot the data
+  return(SP_merged_filtered)
+}
+
+plot_sample_types_graph <- function(SP_merged_filtered) {
+  # plot
   ggplot(SP_merged_filtered, aes(x = Ct1, y = coverage, col = Method, group = interaction(Ct1, Sample_Type))) + 
     geom_point(alpha = 1, size = 4) +
     geom_line(color = "black") +
     scale_x_continuous(limits = c(0, 40), breaks = c(0, 10, 20, 30, 40)) +
-    facet_wrap(~Sample_Type) 
-}  
+    facet_wrap(~Sample_Type)
+} 
 
-# assemble combined plots ------------------------------------------------------
+# assemble coverage by sample type plot for s. pneumo  -------------------------
 
 SP_coverage_plot <- process_data(SP_metadat, SP_amp_cov, SP_mNGS_cov)
-plot_sample_types(SP_coverage_plot$SP_merged)
+SP_filtered <- plot_sample_types(SP_coverage_plot$SP_merged)
+plot_sample_types_graph(SP_filtered)
 
-ggsave(outpng, width = 200, height = 200, dpi = 400, units = "mm")
-
-
-# m.tuberculosis vs s.pneumo coverage plot ------------------------------------
+ggsave(sp_outpng, width = 200, height = 200, dpi = 400, units = "mm")
 
 
+# m.tuberculosis data manipulation ---------------------------------------------
+
+process_and_plot_tb_data <- function(TB_metadat_path, TB_amp_cov_path) {
+  
+  # read in files
+  TB_metadat <- read_delim(TB_metadat_path)  
+  TB_amp_cov <- read_delim(TB_amp_cov_path, delim = "\t") 
+  
+  # merge 
+  TB_merged <- TB_metadat %>%
+    full_join(TB_amp_cov, by = "Seq_ID") %>%
+    mutate(pathogen = "TB") %>%
+    mutate(Seq_ID = str_remove(Seq_ID, "^Yale-"))
+  
+  # filter
+  TB_merged_filtered <- TB_merged %>%
+    filter((Template_dilution == "0.001" | Template_dilution == "1e-03") & 
+             (subsample == "1" | subsample == "1.0" | subsample == "1.00") & 
+             !is.na(CT) & CT != "NaN")
+  
+  # return
+  return(TB_merged_filtered)
+}
+
+# visualize TB and SP plots ----------------------------------------------------
+
+combine_and_plot <- function(TB_metadat_path, TB_amp_cov_path, SP_merged) {
+  
+  # get filtered data from TB
+  TB_filtered <- process_and_plot_tb_data(TB_metadat_path, TB_amp_cov_path)
+  SP_filtered <- plot_sample_types(SP_merged)
+  
+  # filter pneumo data for isolates
+  SP_filtered <- SP_filtered %>%
+    filter(Sample_Type == "Culture isolate")
+  
+  # plot the TB dataset
+  combined_plot <- ggplot() +
+    geom_point(data = TB_filtered, aes(x = CT, y = coverage, col = NGS_Prep_Method),
+               show.legend = T, size = 4) +
+    #geom_smooth(data = TB_filtered, aes(x = CT, y = coverage, group = NGS_Prep_Method, colour = NGS_Prep_Method), method = 'loess') + 
+    geom_point(data = SP_filtered, aes(x = Ct1, y = coverage, col = Method),
+               show.legend = T, size = 4) +
+    #geom_smooth(data = SP_filtered, aes(x = Ct1, y = coverage, group = Method, colour = Method), method = 'loess') + 
+    theme_minimal() + 
+    labs(x='Cycle threshold',y="Genome \ncoverage (%)",color="") +
+    theme_cowplot(font_size=20,font_family = 'sans',rel_small=15/20) +
+    theme(legend.position=c(.1,.25)) +
+    scale_y_continuous(limits = c(0,100)) +
+    scale_x_continuous(limits = c(0,40), breaks = c(0, 10, 20, 30, 40)) + 
+    facet_grid(rows=vars(pathogen)) 
+  
+  return(combined_plot)
+}
 
 
+# assemble TB and SP plots -----------------------------------------------------
+
+TB_filtered <- process_and_plot_tb_data(TB_metadat, TB_amp_cov)
+
+SP_coverage_plot <- process_data(SP_metadat, SP_amp_cov, SP_mNGS_cov)
+TB_plot <- combine_and_plot(TB_metadat, TB_amp_cov, SP_coverage_plot$SP_merged)
+print(TB_plot)
+
+ggsave(combined_out, width = 200, height = 200, dpi = 400, units = "mm")
 
 

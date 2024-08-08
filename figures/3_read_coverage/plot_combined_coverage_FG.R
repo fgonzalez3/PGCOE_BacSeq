@@ -169,34 +169,29 @@ combine_and_plot <- function(TB_metadat_path, TB_amp_cov_path, SP_merged) {
   SP_filtered <- SP_filtered %>%
     filter(Sample_Type == "Culture isolate")
   
-  # plot the TB dataset
+  # plot the combined dataset
   combined_plot <- ggplot() +
     geom_point(data = TB_filtered, aes(x = CT, y = coverage, col = NGS_Prep_Method),
                show.legend = T, size = 4) +
-    #geom_smooth(data = TB_filtered, aes(x = CT, y = coverage, group = NGS_Prep_Method, colour = NGS_Prep_Method), method = 'loess') + 
     geom_point(data = SP_filtered, aes(x = Ct1, y = coverage, col = Method),
                show.legend = T, size = 4) +
-    #geom_smooth(data = SP_filtered, aes(x = Ct1, y = coverage, group = Method, colour = Method), method = 'loess') + 
     theme_minimal() + 
-    labs(x='Cycle threshold',y="Genome \ncoverage (%)",color="") +
-    theme_cowplot(font_size=20,font_family = 'sans',rel_small=15/20) +
-    theme(legend.position=c(.1,.25)) +
-    scale_y_continuous(limits = c(0,100)) +
-    scale_x_continuous(limits = c(0,40), breaks = c(0, 10, 20, 30, 40)) + 
-    facet_grid(rows=vars(pathogen)) 
+    labs(x = 'Cycle threshold', y = "Genome \ncoverage (%)", color = "") +
+    theme_cowplot(font_size = 20, font_family = 'sans', rel_small = 15/20) +
+    theme(legend.position = c(.1, .25),
+          panel.background = element_rect(fill = "white", color = NA),
+          plot.background = element_rect(fill = "white", color = NA)) +
+    facet_grid(rows = vars(pathogen)) +
+    xlim(0, 40)  
   
   return(combined_plot)
 }
 
-
-# assemble TB and SP plots -----------------------------------------------------
+# assemble combined coverage -------------------------------------------------------
 
 TB_filtered <- process_and_plot_tb_data(TB_metadat, TB_amp_cov)
-
 SP_coverage_plot <- process_data(SP_metadat, SP_amp_cov, SP_mNGS_cov)
 TB_plot <- combine_and_plot(TB_metadat, TB_amp_cov, SP_coverage_plot$SP_merged)
 print(TB_plot)
 
-ggsave(combined_out, width = 200, height = 200, dpi = 400, units = "mm")
-
-
+ggsave(combined_out, plot = TB_plot, width = 200, height = 200, dpi = 400, units = "mm", bg = "white")

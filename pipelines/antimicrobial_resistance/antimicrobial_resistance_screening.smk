@@ -13,16 +13,15 @@ rule all:
         expand("results/{genera}/shovill/{sample}/shovill.corrections", sample=SAMPLES, genera=config["genera"]), 
         expand("results/{genera}/shovill/{sample}/shovill.log", sample=SAMPLES, genera=config["genera"]), 
         expand("results/{genera}/shovill/{sample}/spades.fasta", sample=SAMPLES, genera=config["genera"]), 
-        "results/{genera}/abricate/abricate.tsv", genera=config["genera"],   
-        expand("results/{genera}/abricate/{sample}.txt", sample=SAMPLES, genera=config["genera"])
+        expand("results/{genera}/abricate/abricate.tsv", genera=config["genera"])
 
 rule shovill:
     """
     Assemble reads using Shovill 
     """ 
     input:
-        r1=lambda wildcards: READS[wildcards.sample]["r1"],
-        r2=lambda wildcards: READS[wildcards.sample]["r2"]
+        fwd=lambda wildcards: READS[wildcards.sample]["r1"],
+        rev=lambda wildcards: READS[wildcards.sample]["r2"]
     output:
         "results/{genera}/shovill/{sample}/contigs.fa", 
         "results/{genera}/shovill/{sample}/contigs.gfa", 
@@ -35,7 +34,7 @@ rule shovill:
         "envs/shovill.yaml"
     shell:
         """
-        shovill --outdir results/{params.genera}/shovill/{wildcards.sample} --R1 {input.r1} --R2 {input.r2} --force
+        shovill --outdir results/{params.genera}/shovill/{wildcards.sample} --R1 {input.fwd} --R2 {input.rev} --force
         """
 
 rule abricate:
@@ -43,10 +42,11 @@ rule abricate:
     Run in-silico AMR prediction
     """
     input:
-        "results/{genera}/shovill/{sample}/contigs.fasta"
+        expand("results/{genera}/shovill/{sample}/contigs.fa", sample=SAMPLES, genera=config["genera"])
     output:
-        "results/{genera}/abricate/abricate.tsv",
-        "results/{genera}/abricate/{sample}.txt"
+        "results/{genera}/abricate/abricate.tsv"
+    params:
+        genera=config["genera"]
     conda:
         "envs/abricate.yaml"
     shell:

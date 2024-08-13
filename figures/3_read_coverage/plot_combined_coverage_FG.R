@@ -9,7 +9,7 @@ library(readr)
 library(wesanderson)
 
 SP_amp_cov  <- "data/SP_amplicon_seq.csv"
-SP_mNGS_cov <- "data/SP_mNGS_seq.csv"
+SP_mNGS_cov <- "data/SP_mNGS_coverage_stats.csv"
 TB_amp_cov  <- "data/TB_combined_coverage.tsv"
 
 SP_metadat  <- "metadata/PGCOE_DataSheet - S. pneumoniae.csv"

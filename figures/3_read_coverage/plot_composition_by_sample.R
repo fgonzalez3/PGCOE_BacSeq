@@ -26,25 +26,46 @@ heattab <- heattab %>%
 heattab <- merge(heattab,seqtab) %>% filter(taxon_name %in% names(cols))
 heattab$taxon_name <- factor(heattab$taxon_name,levels=rev(names(cols)),ordered=T)
 
-# mark mNGS samples 
-mNGS_samples <- c("Yale-SP00051", "Yale-SP00052", "Yale-SP00053", "Yale-SP00054",
-                  "Yale-SP00055", "Yale-SP00056", "Yale-SP00057", "Yale-SP00058",
-                  "Yale-SP00059", "Yale-SP00060")  
+# filter out samples where we don't have a match 
+reps <- c("Yale-SP00051", "Yale-SP00052", "Yale-SP00053", "Yale-SP00054",
+          "Yale-SP00055", "Yale-SP00056", "Yale-SP00057", "Yale-SP00058", "Yale-SP00059",
+          "Yale-CS00171", "Yale-CS00172", "Yale-CS00173", "Yale-CS00174", "Yale-CS00175",
+          "Yale-CS00176", "Yale-CS00162", "Yale-CS00163", "Yale-CS00164")
 
+# rename 
+name_mapping <- c("Yale-SP00051" = "A889-NoAMP", 
+                  "Yale-SP00052" = "B042-NoAMP",
+                  "Yale-SP00053" = "C677-NoAmp", 
+                  "Yale-SP00054" = "A889-NoAmp",
+                  "Yale-SP00055" = "B042-NoAmp", 
+                  "Yale-SP00056" = "C677-NoAmp", 
+                  "Yale-SP00057" = "W1527-NoAmp", 
+                  "Yale-SP00058" = "W3317-NoAmp", 
+                  "Yale-SP00059" = "W4034-NoAmp",
+                  "Yale-CS00171" = "A889-Amp", 
+                  "Yale-CS00172" = "B042-Amp", 
+                  "Yale-CS00173" = "C677-Amp", 
+                  "Yale-CS00174" = "W1527-Amp", 
+                  "Yale-CS00175" = "W3317-Amp",
+                  "Yale-CS00176" = "W4034-Amp", 
+                  "Yale-CS00162" = "A889-Amp", 
+                  "Yale-CS00163" = "B042-Amp", 
+                  "Yale-CS00164" = "C677-Amp")
 
-sppplot <- ggplot(heattab, aes(x = ID, y = NT_rpm, fill = taxon_name)) + 
+renamed_reps <- name_mapping[reps]
+
+filtered_heattab <- heattab %>% filter(ID %in% reps)
+filtered_heattab$ID <- name_mapping[filtered_heattab$ID]
+filtered_heattab$ID <- factor(filtered_heattab$ID, levels = unique(name_mapping[reps]))
+
+sppplot <- ggplot(filtered_heattab, aes(x = ID, y = NT_rpm, fill = taxon_name)) + 
   geom_bar(stat = "identity") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "bottom",
         axis.title.x = element_blank()) + 
   facet_grid(. ~ Sample_Type, scales = "free_x", space = "free_x") +
   scale_fill_manual(values = cols) +
-  scale_x_discrete(labels = function(x) {
-    ifelse(x %in% mNGS_samples, 
-           paste0("<span style='color:red;'>", x, "</span>"), 
-           x)
-  }) +
-  theme(axis.text.x = element_markdown())
+  theme(axis.text.x = ggtext::element_markdown())
 sppplot
 
 ggsave("bacseq_spneumo_czid_props.png",width=300,height=140,units="mm")

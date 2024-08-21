@@ -35,3 +35,7 @@ get_amp_paths.sh
 get_mNGS_paths.sh
 get_overall_coverage_stats.sh
 
+# serotyping files 
+*GPS_v9*
+*pathogenwatch*
+*Yale-*

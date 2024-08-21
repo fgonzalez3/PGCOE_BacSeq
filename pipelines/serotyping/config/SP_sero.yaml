@@ -1,0 +1,6 @@
+genera: "SP"
+
+samples:
+  CS00030:
+    r1: "seqs/amplicon/CS00030/Yale-CS00030_S8_L004_R1_001.fastq.gz"
+    r2: "seqs/amplicon/CS00030/Yale-CS00030_S8_L004_R2_001.fastq.gz"

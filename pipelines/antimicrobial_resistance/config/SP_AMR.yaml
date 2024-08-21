@@ -1,1 +1,21 @@
 genera: "SP"
+
+samples:
+  CS00030:
+    r1: "seqs/amplicon/CS00030/Yale-CS00030_S8_L004_R1_001.fastq.gz"
+    r2: "seqs/amplicon/CS00030/Yale-CS00030_S8_L004_R2_001.fastq.gz"
+  CS00047:
+    r1: "seqs/amplicon/CS00047/Yale-CS00047_S65_L004_R1_001.fastq.gz"
+    r2: "seqs/amplicon/CS00047/Yale-CS00047_S65_L004_R2_001.fastq.gz"
+  CS00048:
+    r1: "seqs/amplicon/CS00048/Yale-CS00048_S66_L004_R1_001.fastq.gz"
+    r2: "seqs/amplicon/CS00048/Yale-CS00048_S66_L004_R2_001.fastq.gz"
+  CS00049:
+    r1: "seqs/amplicon/CS00049/Yale-CS00049_S67_L004_R1_001.fastq.gz"
+    r2: "seqs/amplicon/CS00049/Yale-CS00049_S67_L004_R2_001.fastq.gz"
+  CS00050:
+    r1: "seqs/amplicon/CS00050/Yale-CS00050_S68_L004_R1_001.fastq.gz"
+    r2: "seqs/amplicon/CS00050/Yale-CS00050_S68_L004_R2_001.fastq.gz"
+  CS00051:
+    r1: "seqs/amplicon/CS00051/Yale-CS00051_S69_L004_R1_001.fastq.gz"
+    r2: "seqs/amplicon/CS00051/Yale-CS00051_S69_L004_R2_001.fastq.gz"

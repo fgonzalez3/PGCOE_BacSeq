@@ -1,10 +1,9 @@
-import pandas as pd
+import yaml
 
 configfile: "config/SP_AMR.yaml"
 
-samples_df = pd.read_csv("tsv/SP_amplicon_isolate_samples.tsv", sep="\t")
-SAMPLES = samples_df["sample_id"].tolist()
-READS = {row.sample_id: {"r1": row.r1, "r2": row.r2} for row in samples_df.itertuples()}
+SAMPLES = list(config['samples'].keys())
+READS = config['samples']
 
 rule all:
     input:
@@ -13,7 +12,7 @@ rule all:
         expand("results/{genera}/shovill/{sample}/shovill.corrections", sample=SAMPLES, genera=config["genera"]), 
         expand("results/{genera}/shovill/{sample}/shovill.log", sample=SAMPLES, genera=config["genera"]), 
         expand("results/{genera}/shovill/{sample}/spades.fasta", sample=SAMPLES, genera=config["genera"]), 
-        expand("results/{genera}/abricate/abricate.tsv", genera=config["genera"])
+        expand("results/{genera}/abricate/{sample}/abricate.tsv", sample=SAMPLES, genera=config["genera"])
 
 rule shovill:
     """
@@ -34,7 +33,7 @@ rule shovill:
         "envs/shovill.yaml"
     shell:
         """
-        shovill --outdir results/{params.genera}/shovill/{wildcards.sample} --R1 {input.fwd} --R2 {input.rev} --force
+        shovill --outdir results/{params.genera}/shovill/{wildcards.sample} --R1 {input.fwd} --R2 {input.rev} --ram 100 --force
         """
 
 rule abricate:
@@ -42,14 +41,14 @@ rule abricate:
     Run in-silico AMR prediction
     """
     input:
-        expand("results/{genera}/shovill/{sample}/contigs.fa", sample=SAMPLES, genera=config["genera"])
+        "results/{genera}/shovill/{sample}/contigs.fa"
     output:
-        "results/{genera}/abricate/abricate.tsv"
+        "results/{genera}/abricate/{sample}/abricate.tsv"
     params:
         genera=config["genera"]
     conda:
         "envs/abricate.yaml"
     shell:
         """
-        abricate {input} --minid 75 --mincov 75
+        abricate {input} --minid 75 --mincov 75 > {output}
         """

@@ -1,4 +1,4 @@
-import yaml
+import pandas as pd 
 
 configfile: "config/SP_sero.yaml"
 
@@ -9,7 +9,7 @@ READS = {row.sample_id: {"r1": row.r1, "r2": row.r2} for row in samples_df.itert
 rule all:
     input:
         expand("results/{genera}/spades/{sample}/contigs.fasta", genera=config["genera"], sample=SAMPLES),
-        expand("results/{genera}/mlst/mlst.csv", genera=config["genera"]),
+        expand("results/{genera}/mlst/{sample}_mlst.csv", genera=config["genera"], sample=SAMPLES),
         expand("results/{genera}/poppunk/GPSC_assignments_clusters.csv", genera=config["genera"]),
         expand("results/{genera}/poppunk/GPSC_assignments.dists.pkl", genera=config["genera"]),
         expand("results/{genera}/poppunk/GPSC_assignments.h5", genera=config["genera"]),
@@ -35,7 +35,7 @@ rule spades:
        "envs/spades.yaml"
     shell:
         """
-        spades.py --threads 2 --careful -1 {input.r1} -2 {input.r2} -o results/{params.genera}/spades/{wildcards.sample}
+        spades.py --threads 8 --careful -1 {input.r1} -2 {input.r2} -o results/{params.genera}/spades/{wildcards.sample}
         """
 
 rule mlst:
@@ -45,12 +45,12 @@ rule mlst:
     input:
         "results/{genera}/spades/{sample}/contigs.fasta"
     output:
-        csv = "results/{genera}/mlst/mlst.csv"
+        csv = "results/{genera}/mlst/{sample}_mlst.csv"
     conda:
         "envs/mlst.yaml"
     shell:
         """
-        mlst {input} --csv > {output.csv}
+        mlst --csv {input} > {output.csv}
         """
 
 rule poppunk:
@@ -92,5 +92,5 @@ rule microreact:
         "envs/poppunk.yaml"
     shell:
         """
-        poppunk_visualise --ref-db GPS_v9 --query-db data/GPSC_assignments --output results/{params.genera}/microreact --previous-clustering {input} --perplexity 50 --microreact --threads 8
+        poppunk_visualise --ref-db GPS_v9 --query-db results/{params.genera}/poppunk --output results/{params.genera}/microreact --previous-clustering {input} --perplexity 50 --microreact --threads 8
         """

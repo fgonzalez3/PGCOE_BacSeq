@@ -1,9 +1,10 @@
-import yaml
+import pandas as pd
 
 configfile: "config/SP_AMR.yaml"
 
-SAMPLES = list(config['samples'].keys())
-READS = config['samples']
+samples_df = pd.read_csv("tsv/SP_amplicon_isolates.tsv", sep="\t")
+SAMPLES = samples_df["sample_id"].tolist()
+READS = {row.sample_id: {"r1": row.r1, "r2": row.r2} for row in samples_df.itertuples()}
 
 rule all:
     input:
@@ -29,11 +30,10 @@ rule shovill:
         "results/{genera}/shovill/{sample}/spades.fasta"
     params:
         genera=config["genera"]
-    conda:
-        "envs/shovill.yaml"
     shell:
         """
-        shovill --outdir results/{params.genera}/shovill/{wildcards.sample} --R1 {input.fwd} --R2 {input.rev} --ram 100 --force
+        source activate /home/flg9/.conda/envs/shovill
+        shovill --outdir results/{params.genera}/shovill/{wildcards.sample} --R1 {input.fwd} --R2 {input.rev} --force
         """
 
 rule abricate:

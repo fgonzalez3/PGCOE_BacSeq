@@ -8,7 +8,11 @@ READS = {row.sample_id: {"r1": row.r1, "r2": row.r2} for row in samples_df.itert
 
 rule all:
     input:
-        expand("results/{genera}/spades/{sample}/contigs.fasta", genera=config["genera"], sample=SAMPLES),
+        expand("results/{genera}/shovill/{sample}/contigs.fa", sample=SAMPLES, genera=config["genera"]), 
+        expand("results/{genera}/shovill/{sample}/contigs.gfa", sample=SAMPLES, genera=config["genera"]), 
+        expand("results/{genera}/shovill/{sample}/shovill.corrections", sample=SAMPLES, genera=config["genera"]), 
+        expand("results/{genera}/shovill/{sample}/shovill.log", sample=SAMPLES, genera=config["genera"]), 
+        expand("results/{genera}/shovill/{sample}/spades.fasta", sample=SAMPLES, genera=config["genera"]), 
         expand("results/{genera}/mlst/{sample}_mlst.csv", genera=config["genera"], sample=SAMPLES),
         expand("results/{genera}/poppunk/GPSC_assignments_clusters.csv", genera=config["genera"]),
         expand("results/{genera}/poppunk/GPSC_assignments.dists.pkl", genera=config["genera"]),
@@ -20,22 +24,25 @@ rule all:
         expand("results/{genera}/microreact/microreact_core_NJ.nwk", genera=config["genera"]),
         expand("results/{genera}/microreact/microreact_perplexity50.0_accessory_mandrake.dot", genera=config["genera"])
 
-rule spades:
+rule shovill:
     """
-    Assemble reads using Spades 
+    Assemble reads using Shovill 
     """ 
     input:
-        r1 = lambda wildcards: READS[wildcards.sample]["r1"],
-        r2 = lambda wildcards: READS[wildcards.sample]["r2"]
+        fwd=lambda wildcards: READS[wildcards.sample]["r1"],
+        rev=lambda wildcards: READS[wildcards.sample]["r2"]
     output:
-        "results/{genera}/spades/{sample}/contigs.fasta"
+        "results/{genera}/shovill/{sample}/contigs.fa", 
+        "results/{genera}/shovill/{sample}/contigs.gfa", 
+        "results/{genera}/shovill/{sample}/shovill.corrections", 
+        "results/{genera}/shovill/{sample}/shovill.log", 
+        "results/{genera}/shovill/{sample}/spades.fasta"
     params:
         genera=config["genera"]
-    conda:
-       "envs/spades.yaml"
     shell:
         """
-        spades.py --threads 8 --careful -1 {input.r1} -2 {input.r2} -o results/{params.genera}/spades/{wildcards.sample}
+        source activate /home/flg9/.conda/envs/shovill
+        shovill --outdir results/{params.genera}/shovill/{wildcards.sample} --R1 {input.fwd} --R2 {input.rev} --force
         """
 
 rule mlst:
@@ -43,7 +50,7 @@ rule mlst:
     In-silico MLST assignment
     """
     input:
-        "results/{genera}/spades/{sample}/contigs.fasta"
+        "results/{genera}/shovill/{sample}/contigs.fa"
     output:
         csv = "results/{genera}/mlst/{sample}_mlst.csv"
     conda:

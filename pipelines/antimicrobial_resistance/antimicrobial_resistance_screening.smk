@@ -13,7 +13,10 @@ rule all:
         expand("results/{genera}/shovill/{sample}/shovill.corrections", sample=SAMPLES, genera=config["genera"]), 
         expand("results/{genera}/shovill/{sample}/shovill.log", sample=SAMPLES, genera=config["genera"]), 
         expand("results/{genera}/shovill/{sample}/spades.fasta", sample=SAMPLES, genera=config["genera"]), 
-        expand("results/{genera}/abricate/{sample}/abricate.tsv", sample=SAMPLES, genera=config["genera"])
+        expand("results/{genera}/abricate/{sample}/card_abricate.tsv", sample=SAMPLES, genera=config["genera"]),
+        expand("results/{genera}/abricate/{sample}/megares_abricate.tsv", sample=SAMPLES, genera=config["genera"]),
+        expand("results/{genera}/abricate/{sample}/argannot_abricate.tsv", sample=SAMPLES, genera=config["genera"]),
+        expand("results/{genera}/abricate/{sample}/vfdb_abricate.tsv", sample=SAMPLES, genera=config["genera"])
 
 rule shovill:
     """
@@ -43,12 +46,18 @@ rule abricate:
     input:
         "results/{genera}/shovill/{sample}/contigs.fa"
     output:
-        "results/{genera}/abricate/{sample}/abricate.tsv"
+        out1="results/{genera}/abricate/{sample}/card_abricate.tsv",
+        out2="results/{genera}/abricate/{sample}/megares_abricate.tsv",
+        out3="results/{genera}/abricate/{sample}/argannot_abricate.tsv",
+        out4="results/{genera}/abricate/{sample}/vfdb_abricate.tsv"
     params:
         genera=config["genera"]
     conda:
         "envs/abricate.yaml"
     shell:
         """
-        abricate {input} --minid 75 --mincov 75 > {output}
+        abricate {input} --minid 75 --mincov 75 --db card > {output.out1}
+        abricate {input} --minid 75 --mincov 75 --db megares > {output.out2}
+        abricate {input} --minid 75 --mincov 75 --db argannot > {output.out3}
+        abricate {input} --minid 75 --mincov 75 --db vfdb > {output.out4}
         """

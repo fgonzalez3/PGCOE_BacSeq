@@ -75,10 +75,9 @@ rule poppunk:
         "results/{genera}/poppunk/GPSC_assignments_unword_clusters.csv"
     params:
         genera=config["genera"]
-    conda:
-        "envs/poppunk.yaml"
     shell:
         """
+        source activate /home/flg9/.conda/envs/poppunk
         poppunk_assign --db GPS_v9 --external-clustering GPS_v9_external_clusters.csv \
         --output results/{params.genera}/poppunk --query {input.queryseqs} --threads 8 --update-db
         """
@@ -95,9 +94,8 @@ rule microreact:
         "results/{genera}/microreact/microreact_perplexity50.0_accessory_mandrake.dot"
     params:
         genera=config["genera"]
-    conda:
-        "envs/poppunk.yaml"
     shell:
         """
+        source activate /home/flg9/.conda/envs/poppunk
         poppunk_visualise --ref-db GPS_v9 --query-db results/{params.genera}/poppunk --output results/{params.genera}/microreact --previous-clustering {input} --perplexity 50 --microreact --threads 8
         """

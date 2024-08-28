@@ -68,9 +68,6 @@ rule bwa:
         """
 
 rule variant_calling:
-    """
-    Run variant calling on aligned reads using BCF tools
-    """
     input:
         bam="results/{genera}/alignments/{sample}/{sample}_aligned_sorted.bam"
     output:
@@ -82,8 +79,10 @@ rule variant_calling:
         ref=config["ref"]
     shell:
         """
-        bcftools mpileup -Ou -f {params.ref} {input.bam} | bcftools call --ploidy 1 -vc0 z -o {output.vcf}
+        bcftools mpileup -Ou -f {params.ref} {input.bam} -o temp.bcf
+        bcftools call --ploidy 1 -vc -Oz -o {output.vcf} temp.bcf
         tabix -p vcf {output.vcf}
+        rm temp.bcf
         """
 
 rule variant_filter:
@@ -100,5 +99,5 @@ rule variant_filter:
         genera=config["genera"]
     shell:
         """
-        bcftools filter -0 z -o {output.filtered_vcf} -i 'QUAL>10 & DP>10' {input.vcf}
+        bcftools filter -O z -o {output.filtered_vcf} -i 'QUAL>10 & DP>10' {input.vcf}
         """

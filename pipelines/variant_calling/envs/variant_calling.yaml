@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bowtie2
+  - samtools
+  - bedtools
+  - bwa-mem2
+  - bcftools

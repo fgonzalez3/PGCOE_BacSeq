@@ -14,8 +14,8 @@ rule all:
         expand("results/{genera}/ref_index/indexed_ref.bwt.2bit.64", genera=config["genera"]),
         expand("results/{genera}/ref_index/indexed_ref.pac", genera=config["genera"]),
         expand("results/{genera}/alignments/{sample}/{sample}_aligned_sorted.bam", sample=SAMPLES, genera=config["genera"]), 
-        expand("results/{genera}/variant_calls/{sample}/{sample}_variants.vcf", sample=SAMPLES, genera=config["genera"]),
-        expand("results/{genera}/variant_calls/{sample}/{sample}_filtered_variants.vcf", sample=SAMPLES, genera=config["genera"])
+        expand("results/{genera}/variant_calls/{sample}/{sample}_variants.vcf.gz", sample=SAMPLES, genera=config["genera"]),
+        expand("results/{genera}/variant_calls/{sample}/{sample}_filtered_variants.vcf.gz", sample=SAMPLES, genera=config["genera"])
 
 rule bwa_build:
     """
@@ -71,7 +71,7 @@ rule variant_calling:
     input:
         bam="results/{genera}/alignments/{sample}/{sample}_aligned_sorted.bam"
     output:
-        vcf="results/{genera}/variant_calls/{sample}/{sample}_variants.vcf"
+        vcf="results/{genera}/variant_calls/{sample}/{sample}_variants.vcf.gz"
     conda:
         "envs/variant_calling.yaml"
     params:
@@ -90,9 +90,9 @@ rule variant_filter:
     Filter variants based on quality and depth
     """
     input:
-        vcf="results/{genera}/variant_calls/{sample}/{sample}_variants.vcf"
+        vcf="results/{genera}/variant_calls/{sample}/{sample}_variants.vcf.gz"
     output:
-        filtered_vcf="results/{genera}/variant_calls/{sample}/{sample}_filtered_variants.vcf"
+        filtered_vcf="results/{genera}/variant_calls/{sample}/{sample}_filtered_variants.vcf.gz"
     conda:
         "envs/variant_calling.yaml"
     params:

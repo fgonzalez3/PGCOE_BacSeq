@@ -46,24 +46,24 @@ reps <- c("Yale-SP00051", "Yale-SP00052", "Yale-SP00053", "Yale-SP00054",
 
 
 # rename IDs
-name_mapping <- c("Yale-SP00051" = "A889-NoAMP", 
-                  "Yale-SP00052" = "B042-NoAMP",
-                  "Yale-SP00053" = "C677-NoAmp", 
-                  "Yale-SP00054" = "A889-NoAmp",
-                  "Yale-SP00055" = "B042-NoAmp", 
-                  "Yale-SP00056" = "C677-NoAmp", 
-                  "Yale-SP00057" = "W1527-NoAmp", 
-                  "Yale-SP00058" = "W3317-NoAmp", 
-                  "Yale-SP00059" = "W4034-NoAmp",
-                  "Yale-CS00171" = "A889-Amp", 
-                  "Yale-CS00172" = "B042-Amp", 
-                  "Yale-CS00173" = "C677-Amp", 
-                  "Yale-CS00174" = "W1527-Amp", 
-                  "Yale-CS00175" = "W3317-Amp",
-                  "Yale-CS00176" = "W4034-Amp", 
-                  "Yale-CS00162" = "A889-Amp", 
-                  "Yale-CS00163" = "B042-Amp", 
-                  "Yale-CS00164" = "C677-Amp")
+name_mapping <- c("Yale-SP00051" = "A889-Unamplified", 
+                  "Yale-SP00052" = "B042-Unamplified",
+                  "Yale-SP00053" = "C677-Unamplified", 
+                  "Yale-SP00054" = "A889-Unamplified",
+                  "Yale-SP00055" = "B042-Unamplified", 
+                  "Yale-SP00056" = "C677-Unamplified", 
+                  "Yale-SP00057" = "W1527-Unamplified", 
+                  "Yale-SP00058" = "W3317-Unamplified", 
+                  "Yale-SP00059" = "W4034-Unamplified",
+                  "Yale-CS00171" = "A889-Amplified", 
+                  "Yale-CS00172" = "B042-Amplified", 
+                  "Yale-CS00173" = "C677-Amplified", 
+                  "Yale-CS00174" = "W1527-Amplified", 
+                  "Yale-CS00175" = "W3317-Amplified",
+                  "Yale-CS00176" = "W4034-Amplified", 
+                  "Yale-CS00162" = "A889-Amplified", 
+                  "Yale-CS00163" = "B042-Amplified", 
+                  "Yale-CS00164" = "C677-Amplified")
 
 
 # rename reps
@@ -87,13 +87,24 @@ all_ids <- unique(c(id_order, gsub("-Amp", "-NoAmp", id_order), gsub("-NoAmp", "
 # set the factor levels of ID based on the complete list
 filtered_heattab$ID <- factor(filtered_heattab$ID, levels = all_ids)
 
-# filter for NT_rpm greater than or equal to 1000 for plotting
-#plot_data <- filtered_heattab %>%
-  #filter(NT_rpm >= 600)
+# create a new column for labels based on the Method column
+#filtered_heattab <- filtered_heattab %>%
+  #mutate(Label = case_when(
+   # Method == "Ampllicon" ~ "Amplified",
+   # Method == "mNGS" ~ "Unamplified"
+ # ))
+
+# create a summary data frame for labels
+#label_data <- filtered_heattab %>%
+ # group_by(ID) %>%
+  #summarise(Label = first(Label), max_NT_rpm = max(NT_rpm))
+
+# plot reads per million by sample ---------------------------------------------
 
 # plot
 sppplot <- ggplot(filtered_heattab, aes(x = ID, y = NT_rpm, fill = taxon_name)) + 
   geom_bar(stat = "identity") + 
+  #geom_text(data = label_data, aes(x = ID, y = max_NT_rpm + 1, label = Label), vjust = -0.5, size = 3, inherit.aes = FALSE) +  # Add labels above bars
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "bottom",
         axis.title.x = element_blank()) + 
@@ -107,3 +118,54 @@ sppplot <- ggplot(filtered_heattab, aes(x = ID, y = NT_rpm, fill = taxon_name)) 
 sppplot
 ggsave("bacseq_spneumo_czid_props.png",width=350,height=300,units="mm")
 
+
+# plot percentage of reads by sample -------------------------------------------
+
+# rename reps
+renamed_reps <- name_mapping[reps]
+
+# filter for the representative sequences we want to visualize
+filtered_heattab <- heattab %>% 
+  filter(ID %in% reps) %>%
+  mutate(ID = name_mapping[ID])
+
+# calculate total amount of reads per sequencing run
+total_reads_per_id <- filtered_heattab %>%
+  group_by(ID) %>%
+  summarise(total_reads = sum(NT_r))
+
+# calculate % of reads that map to each taxon 
+filtered_heattab <- filtered_heattab %>%
+  left_join(total_reads_per_id, by = "ID") %>%
+  mutate(percentage_reads = (NT_r / total_reads) * 100)
+
+# arrange ID order 
+id_order <- filtered_heattab %>%
+  group_by(ID) %>%
+  summarise(max_percentage = max(percentage_reads)) %>%
+  arrange(desc(max_percentage)) %>%
+  pull(ID)
+
+# make list of ID order by seq method
+all_ids <- unique(c(id_order, gsub("-Amp", "-NoAmp", id_order), gsub("-NoAmp", "-Amp", id_order)))
+
+# factor levels of IDs
+filtered_heattab$ID <- factor(filtered_heattab$ID, levels = all_ids)
+
+# plot
+sppplot <- ggplot(filtered_heattab, aes(x = ID, y = percentage_reads, fill = taxon_name)) + 
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "bottom",
+        axis.title.x = element_blank()) + 
+  facet_grid(~Sample_Type, scales = "free_x", space = "free_x") +
+  scale_fill_manual(values = all_cols, 
+                    breaks = c("Streptococcus pneumoniae", "Streptococcus mitis",
+                               "Streptococcus oralis", "Streptococcus sp. oral taxon 061",
+                               "Streptococcus sp. oral taxon 431")) +  
+  theme(axis.text.x = ggtext::element_markdown()) + 
+  ylab("% Reads")
+
+sppplot
+
+ggsave("bacseq_spneumo_czid_pc.png",width=350,height=300,units="mm")

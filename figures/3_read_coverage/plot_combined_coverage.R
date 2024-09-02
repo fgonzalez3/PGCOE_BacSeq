@@ -180,6 +180,9 @@ combine_and_plot <- function(TB_metadat_path, TB_amp_cov_path, metadata_path, am
   TB_filtered <- process_and_plot_tb_data(TB_metadat_path, TB_amp_cov_path)
   SP_filtered <- process_data(metadata_path, amp_cov_path, mngs_cov_path)$SP_merged
   
+  #view(SP_filtered)
+  #view(TB_filtered)
+  
   # rename sequencing methods
   TB_filtered$seq_method <- ifelse(TB_filtered$NGS_Prep_Method %in% c("Mpox/Hybrid CovidSeq"), 
                                       "with amplification", 
@@ -192,9 +195,8 @@ combine_and_plot <- function(TB_metadat_path, TB_amp_cov_path, metadata_path, am
                                       ifelse(SP_filtered$NGS_Prep_Method %in% c("Nextera XT (GLab)"), 
                                              "without amplification", 
                                              SP_filtered$NGS_Prep_Method))
-  
   # color palette 
-  wes_palette <- wes_palette("Royal1", 2, type = "continuous")
+  wes_palette <- wes_palette("AsteroidCity1", 2, type = "continuous")
   
   # plot 
   combined_plot <- ggplot() +
@@ -205,18 +207,19 @@ combine_and_plot <- function(TB_metadat_path, TB_amp_cov_path, metadata_path, am
     theme_minimal() + 
     labs(x = 'Cycle threshold', y = "Genome \ncoverage (%)", color = "") +
     theme_cowplot(font_size = 20, font_family = 'sans', rel_small = 15/20) +
-    theme(legend.position = c(.1, .25),
+    theme(legend.position = c(.01, .25),
           panel.background = element_rect(fill = "white", color = NA),
           plot.background = element_rect(fill = "white", color = NA)) +
     facet_grid(rows = vars(pathogen)) +
-    geom_smooth(data = TB_filtered, aes(x = CT, y = coverage, col = seq_method), method = "loess", se = F) +
-    geom_smooth(data = SP_filtered, aes(x = Ct1, y = coverage, col = seq_method), method = "loess", se = F) +
+    geom_line(data = TB_filtered, aes(x = CT, y = coverage, col = seq_method), 
+              method = "loess", se = F, size = 1.5) +
+    geom_line(data = SP_filtered, aes(x = Ct1, y = coverage, col = seq_method), 
+              method = "loess", se = F, size =1.5) +
     xlim(20, 40) + 
     geom_hline(yintercept = 80) +
     scale_x_continuous(breaks = c(20, 30, 40)) + 
     scale_y_continuous(breaks = c(0, 50, 100)) + 
     scale_color_manual(values = wes_palette)
-  
   
   return(combined_plot)
 }
@@ -226,8 +229,6 @@ combine_and_plot <- function(TB_metadat_path, TB_amp_cov_path, metadata_path, am
 combined_plot <- combine_and_plot(TB_metadat, TB_amp_cov, SP_metadat, SP_amp_cov, SP_mNGS_cov)
 print(combined_plot)
 ggsave(sp_outpng, width = 200, height = 200, dpi = 400, units = "mm")
-
-
 
 
 
